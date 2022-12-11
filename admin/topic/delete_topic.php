@@ -2,17 +2,8 @@
 // session
 session_start();
 
-// check isAdmin or not
-if (!isset($_SESSION['isAdmin'])) {
-	header("Location: /403.php");
-} else {
-	if ($_SESSION['isAdmin'] == 0) {
-		header("Location: /403.php");
-	}
-}
-
-// import connection
-include  $_SERVER['DOCUMENT_ROOT'] . '/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkAdmin.php';
 
 // POST request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

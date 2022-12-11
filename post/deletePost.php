@@ -3,6 +3,7 @@
 session_start();
 
 include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkLoggedIn.php';
 
 // check for POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

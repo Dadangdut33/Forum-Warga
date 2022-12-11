@@ -22,7 +22,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/fetchUserProfile.php';
   </script>
   <link rel="stylesheet" href="/index.css">
   <link rel="icon" href="/favicon.ico">
-  <title><?php echo $username; ?>'s profile</title>
+  <title><?php echo $username; ?>'s profile | Forum Warga <?php echo $forumName; ?></title>
 </head>
 
 <body>

@@ -5,6 +5,7 @@ session_start();
 
 // import conn
 include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkLoggedIn.php';
 
 // check post request that means user is trying to comment
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

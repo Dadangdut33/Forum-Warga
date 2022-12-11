@@ -7,46 +7,60 @@ session_start();
 
 // conn
 include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkLoggedIn.php';
 
 // check for post request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	// get the data
-	$title = $_POST['title'];
-	$content = $_POST['content'];
-	$topic = $_POST['topic'];
-	$user = $_SESSION['username'];
+  // get the data
+  $title = $_POST['title'];
+  $content = $_POST['content'];
+  $topic = $_POST['topic'];
+  $pinned = $_POST['pinned'];
+  $user = $_SESSION['username'];
+  $isAdmin = $_SESSION['isAdmin'];
 
-	// check if title and content is empty
-	if (empty($title) || empty($content)) {
-		echo '<div class="alert alert-danger" role="alert">Title and Content cannot be empty</div>';
-	} else {
-		// strip tags
-		$title = strip_tags($title);
-		$content = strip_tags($content);
-		$topic = strip_tags($topic);
+  // check if title and content is empty
+  if (empty($title) || empty($content)) {
+    echo '<div class="alert alert-danger" role="alert">Title and Content cannot be empty</div>';
+  } else {
+    // strip tags
+    $title = strip_tags($title);
+    $content = strip_tags($content);
+    $topic = strip_tags($topic);
 
-		// real escape string
-		$title = mysqli_real_escape_string($conn, $title);
-		$content = mysqli_real_escape_string($conn, $content);
-		$topic = mysqli_real_escape_string($conn, $topic);
+    // real escape string
+    $title = mysqli_real_escape_string($conn, $title);
+    $content = mysqli_real_escape_string($conn, $content);
+    $topic = mysqli_real_escape_string($conn, $topic);
 
-		// insert data into db
-		$sql = "INSERT INTO post (title, content, userID, topicID) VALUES ('$title', '$content', '$user', '$topic')";
-		$result = mysqli_query($conn, $sql);
+    // first check topic exist or not, if not exist create it
+    // if topic not exist, create it
+    if ($topic == "notopic") {
+      $sql = "INSERT INTO topic (name) VALUES ('General')";
+      $result = mysqli_query($conn, $sql);
+      $topic = "General";
+    }
 
-		// check result, if error print error
-		if (!$result) {
-			$error = 'Error: ' . mysqli_error($conn);
-			echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-		} else {
-			// echo success
-			echo '<div class="alert alert-success" role="alert">Successfully created a new post</div>';
-			// echo you will be redirected in 3 seconds
-			echo '<div class="alert alert-info" role="alert">You will be redirected to the new post</div>';
-			// redirect to new post
-			header('refresh: 1; url=/post/?id=' . mysqli_insert_id($conn));
-		}
-	}
+    // insert data into db
+    if ($isAdmin)
+      $sql = "INSERT INTO post (title, content, userID, topicID, pinned) VALUES ('$title', '$content', '$user', '$topic', '$pinned')";
+    else
+      $sql = "INSERT INTO post (title, content, userID, topicID) VALUES ('$title', '$content', '$user', '$topic')";
+    $result = mysqli_query($conn, $sql);
+
+    // check result, if error print error
+    if (!$result) {
+      $error = 'Error: ' . mysqli_error($conn);
+      echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+    } else {
+      // echo success
+      echo '<div class="alert alert-success" role="alert">Successfully created a new post</div>';
+      // echo you will be redirected in 3 seconds
+      echo '<div class="alert alert-info" role="alert">You will be redirected to the new post</div>';
+      // redirect to new post
+      header('refresh: 1; url=/post/?id=' . mysqli_insert_id($conn));
+    }
+  }
 }
 
 ?>
@@ -96,24 +110,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <select class="form-control" name="topic" id="topic" required>
                   <option value="" hidden disabled selected>Select a topic</option>
                   <?php
-									$sql = "SELECT * FROM topic";
-									$result = mysqli_query($conn, $sql);
+                  $sql = "SELECT * FROM topic";
+                  $result = mysqli_query($conn, $sql);
 
-									// check result length
-									if (mysqli_num_rows($result) > 0) {
-										while ($row = mysqli_fetch_assoc($result)) {
-											echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
-										}
-									} else {
-										echo '<option value="No Topic">No Topic</option>';
-									}
-									?>
+                  // check result length
+                  if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                      echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+                    }
+                  } else {
+                    echo '<option value="notopic">No Topic</option>';
+                  }
+                  ?>
                 </select>
               </div>
-              <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary center" style="margin-top: 10px;">Post</button>
-                <button onclick="window.location.reload()" class="btn btn-primary center"
-                  style="margin-top: 10px; margin-left: 10px;">Cancel</button>
+              <?php
+              if ($_SESSION['isAdmin'] == 1)
+                echo '
+                <div class="form-group mt-1">
+                <input type="checkbox" class="form-check-input" name="pinned" id="pinned">
+                <label for="pinned">Pin post</label>
+                </div>
+                '
+              ?>
+              <div class="d-flex justify-content-center mt-1">
+                <button onclick="window.location.reload()" class="btn btn-danger center">Cancel</button>
+                <button type="submit" class="btn btn-primary center ms-1">Post</button>
               </div>
             </form>
             <script>

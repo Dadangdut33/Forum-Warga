@@ -5,13 +5,38 @@
 // session
 session_start();
 
-// check isAdmin or not
-if (!isset($_SESSION['isAdmin'])) {
-	header("Location: /403.php");
-} else {
-	if ($_SESSION['isAdmin'] == 0) {
-		header("Location: /403.php");
-	}
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkAdmin.php';
+
+// POST request
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  // get the data
+  $forumName = $_POST['forumName'];
+  $forumName = strip_tags($forumName);
+  $forumName = mysqli_real_escape_string($conn, $forumName);
+
+  // first check if forum name exist or not
+  $sql = "SELECT * FROM web_config WHERE id = 1";
+  $result = mysqli_query($conn, $sql);
+
+  // if not exist then create a new one
+  if (mysqli_num_rows($result) == 0) {
+    $sql = "INSERT INTO web_config (forum_name) VALUES ('$forumName')";
+  } else {
+    // else update the name
+    $sql = "UPDATE web_config SET forum_name = '$forumName' WHERE id = 1";
+  }
+
+  $result = mysqli_query($conn, $sql);
+
+  // check result, if error print error
+  if (!$result) {
+    $error = 'Error: ' . mysqli_error($conn);
+    echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+  } else {
+    // redirect to admin menu
+    header("Location: /admin?success=1");
+  }
 }
 
 ?>
@@ -29,10 +54,24 @@ if (!isset($_SESSION['isAdmin'])) {
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <link rel="stylesheet" href="/index.css">
   <link rel="icon" href="/favicon.ico">
-  <title>Post Tags</title>
+  <title>Admin Dashboard | Forum Warga <?php echo $forumName; ?></title>
 </head>
 
 <body>
+  <?php
+  if (isset($_GET['success'])) {
+    echo '<div id="alert-success" class="alert alert-success" role="alert">Successfully changed forum name!</div>';
+
+    echo '
+    <script>
+      $(document).ready(function() {
+        $("#alert-success").delay(2000).fadeOut("slow");
+      });
+    </script>
+    ';
+  }
+  ?>
+
   <main class="center-vertical-horizontal">
     <div class="container">
       <div class="row bg-white">
@@ -41,86 +80,36 @@ if (!isset($_SESSION['isAdmin'])) {
             <a href="/" class="btn btn-primary btn-sm">
               <i class="bi bi-arrow-left"></i> Go back to home page
             </a>
-            <a href="./add_topic.php" class="btn btn-primary btn-sm">
-              <i class="bi bi-plus"></i> Add new tag
-            </a>
           </div>
-          <div class="panel-body">
-            <!-- echo table of tags -->
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Topic</th>
-                  <th scope="col">Posts</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-								// connect to db
-								include $_SERVER['DOCUMENT_ROOT'] . '/connection.php';
+          <div class="panel-body d-flex flex-column">
+            <div class="mx-auto">
+              <div>
+                <!-- btn to topic menu -->
+                <a href="/admin/topic" class="btn btn-primary btn-sm">
+                  <i class="bi bi-book-fill"></i> Topics Menu
+                </a>
+                <!-- btn to user menu -->
+                <a href="/admin/user" class="btn btn-primary btn-sm">
+                  <i class="bi bi-people-fill"></i> User Management
+                </a>
+              </div>
+            </div>
 
-								// get all topics
-								$sql = "SELECT * FROM topic";
-								$result = mysqli_query($conn, $sql);
-								// check result
-								if (!$result) {
-									// echo mysql error
-									echo mysqli_error($conn);
-								}
+            <!-- form for web config -->
+            <div>
+              <form action="" method="POST" class="mx-auto">
+                <div class="mb-3">
+                  <label for="forumName" class="form-label">Forum Name</label>
+                  <input type="text" class="form-control" id="forumName" name="forumName"
+                    value="<?php echo $forumName; ?>">
+                </div>
 
-								// get amount of resuilt
-								$resultCheck = mysqli_num_rows($result);
-
-								// echo table
-								if ($resultCheck > 0) {
-									// output data of each row
-									while ($row = mysqli_fetch_assoc($result)) {
-										$tag = $row['name'];
-										$tag_id = $row['id'];
-										$sql = "SELECT * FROM post WHERE topicID = '" . $tag_id . "'";
-										$result2 = mysqli_query($conn, $sql);
-										$num_posts = mysqli_num_rows($result2);
-										echo '<tr>';
-										echo '<th scope="row">' . $tag_id . '</th>';
-										echo '<td>' . $tag . '</td>';
-										echo '<td>' . $num_posts . '</td>';
-										echo '<td><a href="edit_topic.php?id=' . $tag_id . '" class="btn btn-primary btn-sm">Edit</a> <a onclick="deleteTag(' . $tag_id . ')" class="btn btn-danger btn-sm">Delete</a></td>';
-										echo '</tr>';
-									}
-								} else {
-									echo '<tr>';
-									echo '<th scope="row">0</th>';
-									echo '<td>No topic</td>';
-									echo '<td>0</td>';
-									echo '<td><a href="./add_topic.php" class="btn btn-primary btn-sm">Add</a></td>';
-									echo '</tr>';
-								}
-								?>
-              </tbody>
-              <script>
-              function deleteTag(id) {
-                if (confirm("Are you sure you want to delete this topic?")) {
-                  // send ajax request
-                  $.ajax({
-                    url: "./delete_topic",
-                    method: "POST",
-                    data: {
-                      id: id
-                    },
-                    success: function(data) {
-                      if (data == "success") {
-                        // reload page
-                        location.reload();
-                      } else {
-                        alert(data);
-                      }
-                    }
-                  });
-                }
-              }
-              </script>
+                <!-- btn -->
+                <button type="submit" class="btn btn-primary btn-sm">
+                  <i class="bi bi-save"></i> Save
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

@@ -7,98 +7,108 @@ session_start();
 
 // conn
 include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkLoggedIn.php';
 
 // check for get request which is the id of the post
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-	// get the id
-	$id = $_GET['id'];
+  // get the id
+  $id = $_GET['id'];
 
-	// get the data
-	$sql = "SELECT * FROM post WHERE id = '$id'";
-	$result = mysqli_query($conn, $sql);
+  // get the data
+  $sql = "SELECT * FROM post WHERE id = '$id'";
+  $result = mysqli_query($conn, $sql);
 
-	// check result, if error print error
-	if (!$result) {
-		$error = 'Error: ' . mysqli_error($conn);
-		echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-	}
+  // check result, if error print error
+  if (!$result) {
+    $error = 'Error: ' . mysqli_error($conn);
+    echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+  }
 
-	// if there is no data, then redirect to 404 page
-	if (mysqli_num_rows($result) == 0) {
-		header("Location: /404.php");
-	}
+  // if there is no data, then redirect to 404 page
+  if (mysqli_num_rows($result) == 0) {
+    header("Location: /404.php");
+  }
 
-	// if there is data, get the data
-	$result = mysqli_fetch_assoc($result);
-	$title = $result['title'];
-	$content = $result['content'];
-	$topic = $result['topicID'];
-	$user = $result['userID'];
+  // if there is data, get the data
+  $result = mysqli_fetch_assoc($result);
+  $title = $result['title'];
+  $content = $result['content'];
+  $topic = $result['topicID'];
+  $pinned = $result['pinned'];
+  $user = $result['userID'];
 
-	// check if the user is the poster or not
-	if ($_SESSION['username'] != $user) {
-		header("Location: /403.php");
-	}
+  // check if the user is the poster or not
+  if ($_SESSION['username'] != $user) {
+    header("Location: /403.php");
+  }
 }
 
 // check for post request which means edit
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	// get the data
-	$title = $_POST['title'];
-	$content = $_POST['content'];
-	$topic = $_POST['topic'];
-	$id = $_POST['id'];
+  // get the data
+  $title = $_POST['title'];
+  $content = $_POST['content'];
+  $topic = $_POST['topic'];
+  $id = $_POST['id'];
 
-	// get user of the post
-	$sql = "SELECT userID FROM post WHERE id = '$id'";
-	$result = mysqli_query($conn, $sql);
-	$result = mysqli_fetch_assoc($result);
-	$user = $result['userID'];
+  // get user of the post
+  $sql = "SELECT userID FROM post WHERE id = '$id'";
+  $result = mysqli_query($conn, $sql);
+  $result = mysqli_fetch_assoc($result);
+  $user = $result['userID'];
 
-	// check if the user is the poster or not
-	if ($_SESSION['username'] != $user) {
-		header("Location: /403.php");
-	}
+  // check if the user is the poster or not
+  if ($_SESSION['username'] != $user) {
+    header("Location: /403.php");
+  }
 
-	// check if the title is empty
-	if ($title == '') {
-		echo '<div class="alert alert-danger" role="alert">Title cannot be empty!</div>';
-	} else {
-		// check if the content is empty
-		if ($content == '') {
-			echo '<div class="alert alert-danger" role="alert">Content cannot be empty!</div>';
-		} else {
-			// check if the topic is empty
-			if ($topic == '') {
-				echo '<div class="alert alert-danger" role="alert">Topic cannot be empty!</div>';
-			} else {
-				// strip tags
-				$title = strip_tags($title);
-				$content = strip_tags($content);
-				$topic = strip_tags($topic);
+  // check if the title is empty
+  if ($title == '') {
+    echo '<div class="alert alert-danger" role="alert">Title cannot be empty!</div>';
+  } else {
+    // check if the content is empty
+    if ($content == '') {
+      echo '<div class="alert alert-danger" role="alert">Content cannot be empty!</div>';
+    } else {
+      // check if the topic is empty
+      if ($topic == '') {
+        echo '<div class="alert alert-danger" role="alert">Topic cannot be empty!</div>';
+      } else {
+        // strip tags
+        $title = strip_tags($title);
+        $content = strip_tags($content);
+        $topic = strip_tags($topic);
 
-				// real escape string
-				$title = mysqli_real_escape_string($conn, $title);
-				$content = mysqli_real_escape_string($conn, $content);
-				$topic = mysqli_real_escape_string($conn, $topic);
+        // real escape string
+        $title = mysqli_real_escape_string($conn, $title);
+        $content = mysqli_real_escape_string($conn, $content);
+        $topic = mysqli_real_escape_string($conn, $topic);
 
-				// update the post
-				$sql = "UPDATE post SET title = '$title', content = '$content', topicID = '$topic' WHERE id = '$id'";
-				$result = mysqli_query($conn, $sql);
+        // first check topic exist or not, if not exist create it
+        // if topic not exist, create it
+        if ($topic == "notopic") {
+          $sql = "INSERT INTO topic (name) VALUES ('General')";
+          $result = mysqli_query($conn, $sql);
+          $topic = "General";
+        }
 
-				// check result, if error print error
-				if (!$result) {
-					$error = 'Error: ' . mysqli_error($conn);
-					echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-				} else {
-					// alert success with javascript
-					echo '<script>alert("Post updated successfully!");</script>';
-					// redirect to the post
-					header("Location: /post?id=$id");
-				}
-			}
-		}
-	}
+        // update the post
+        $sql = "UPDATE post SET title = '$title', content = '$content', topicID = '$topic' WHERE id = '$id'";
+        $result = mysqli_query($conn, $sql);
+
+        // check result, if error print error
+        if (!$result) {
+          $error = 'Error: ' . mysqli_error($conn);
+          echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+        } else {
+          // alert success with javascript
+          echo '<script>alert("Post updated successfully!");</script>';
+          // redirect to the post
+          header("Location: /post?id=$id");
+        }
+      }
+    }
+  }
 }
 ?>
 
@@ -148,24 +158,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <select class="form-control" name="topic" id="topic" required>
                   <option value="?id=<?php echo $id ?>" hidden disabled>Select a topic</option>
                   <?php
-									$sql = "SELECT * FROM topic";
-									$result = mysqli_query($conn, $sql);
+                  $sql = "SELECT * FROM topic";
+                  $result = mysqli_query($conn, $sql);
 
-									while ($row = mysqli_fetch_assoc($result)) {
-										// check if the topic is the same as the one in the post
-										if ($row['id'] == $topic) {
-											echo '<option value="' . $row['id'] . '" selected>' . $row['name'] . '</option>';
-										} else {
-											echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
-										}
-									}
-									?>
+                  while ($row = mysqli_fetch_assoc($result)) {
+                    // check if the topic is the same as the one in the post
+                    if ($row['id'] == $topic) {
+                      echo '<option value="' . $row['id'] . '" selected>' . $row['name'] . '</option>';
+                    } else {
+                      echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+                    }
+                  }
+                  ?>
                 </select>
               </div>
-              <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary center" style="margin-top: 10px;">Post</button>
-                <a href="./?id=<?php echo $id; ?>" class="btn btn-secondary"
-                  style="margin-top: 10px; margin-left: 10px;">Cancel</a>
+              <?php
+              if ($_SESSION['isAdmin'] == 1) {
+                $checked = $pinned == 1 ? '<input type="checkbox" class="form-check-input" name="pinned" id="pinned" checked>' : '<input type="checkbox" class="form-check-input" name="pinned" id="pinned">';
+                echo '
+                <div class="form-group mt-1">
+                  ' . $checked . '
+                  <label for="pinned">Pin post</label>
+                </div>
+                ';
+              }
+              ?>
+              <div class="d-flex justify-content-center mt-1">
+                <a href="./?id=<?php echo $id; ?>" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary center ms-1">Post</button>
               </div>
             </form>
             <script>

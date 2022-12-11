@@ -7,6 +7,7 @@ session_start();
 
 // conn
 include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkLoggedIn.php';
 
 // check for get request which is the id of the post
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {

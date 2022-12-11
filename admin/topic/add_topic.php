@@ -5,40 +5,32 @@
 // session
 session_start();
 
-// check isAdmin or not
-if (!isset($_SESSION['isAdmin'])) {
-	header("Location: /403.php");
-} else {
-	if ($_SESSION['isAdmin'] == 0) {
-		header("Location: /403.php");
-	}
-}
 
-// conn
-include $_SERVER['DOCUMENT_ROOT'] .  '/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkAdmin.php';
 
 
 // check for POST request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	// get the data
-	$name = $_POST['name'];
+  // get the data
+  $name = $_POST['name'];
 
-	// sanitize input
-	$name = strip_tags($name);
-	$name = mysqli_real_escape_string($conn, $name);
+  // sanitize input
+  $name = strip_tags($name);
+  $name = mysqli_real_escape_string($conn, $name);
 
-	// insert the new tag
-	$sql = "INSERT INTO topic (name) VALUES ('$name')";
-	$result = mysqli_query($conn, $sql);
+  // insert the new tag
+  $sql = "INSERT INTO topic (name) VALUES ('$name')";
+  $result = mysqli_query($conn, $sql);
 
-	// check result, if error print error
-	if (!$result) {
-		$error = 'Error: ' . mysqli_error($conn);
-		echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-	} else {
-		// redirect to admin menu
-		header("Location: ./index");
-	}
+  // check result, if error print error
+  if (!$result) {
+    $error = 'Error: ' . mysqli_error($conn);
+    echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+  } else {
+    // redirect to admin menu
+    header("Location: /admin/topic");
+  }
 }
 
 ?>

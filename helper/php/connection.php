@@ -11,3 +11,15 @@ if (!$conn)
 
 
 $server_root = $_SERVER['DOCUMENT_ROOT'];
+
+// query for forum name
+$sql = "SELECT * FROM web_config";
+$result = mysqli_query($conn, $sql);
+
+// check result
+if ($result && $result->num_rows > 0) {
+	$forumName = $result->fetch_assoc()['forum_name'];
+} else {
+	// echo mysqli_error($conn);
+	$forumName = "";
+}

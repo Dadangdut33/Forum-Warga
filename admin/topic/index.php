@@ -5,15 +5,8 @@
 // session
 session_start();
 
-// check isAdmin or not
-if (!isset($_SESSION['isAdmin'])) {
-	header("Location: /403.php");
-} else {
-	if ($_SESSION['isAdmin'] == 0) {
-		header("Location: /403.php");
-	}
-}
-
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkAdmin.php';
 ?>
 
 <head>
@@ -29,7 +22,7 @@ if (!isset($_SESSION['isAdmin'])) {
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <link rel="stylesheet" href="/index.css">
   <link rel="icon" href="/favicon.ico">
-  <title>Post Tags</title>
+  <title>Post Tags | Forum Warga <?php echo $forumName; ?></title>
 </head>
 
 <body>
@@ -38,7 +31,7 @@ if (!isset($_SESSION['isAdmin'])) {
       <div class="row bg-white">
         <div class="panel panel-default" style="padding: 12px;">
           <div class="panel-heading">
-            <a href="/" class="btn btn-primary btn-sm">
+            <a href="/admin" class="btn btn-primary btn-sm">
               <i class="bi bi-arrow-left"></i> Go back to Admin Dashboard
             </a>
             <a href="./add_topic.php" class="btn btn-primary btn-sm">
@@ -58,46 +51,45 @@ if (!isset($_SESSION['isAdmin'])) {
               </thead>
               <tbody>
                 <?php
-								// connect to db
-								include $_SERVER['DOCUMENT_ROOT'] . '/connection.php';
+                // get all topics
+                $sql = "SELECT * FROM topic";
+                $result = mysqli_query($conn, $sql);
+                // check result
+                if (!$result) {
+                  // echo mysql error
+                  echo mysqli_error($conn);
+                }
 
-								// get all topics
-								$sql = "SELECT * FROM topic";
-								$result = mysqli_query($conn, $sql);
-								// check result
-								if (!$result) {
-									// echo mysql error
-									echo mysqli_error($conn);
-								}
+                // get amount of resuilt
+                $resultCheck = mysqli_num_rows($result);
 
-								// get amount of resuilt
-								$resultCheck = mysqli_num_rows($result);
-
-								// echo table
-								if ($resultCheck > 0) {
-									// output data of each row
-									while ($row = mysqli_fetch_assoc($result)) {
-										$tag = $row['name'];
-										$tag_id = $row['id'];
-										$sql = "SELECT * FROM post WHERE topicID = '" . $tag_id . "'";
-										$result2 = mysqli_query($conn, $sql);
-										$num_posts = mysqli_num_rows($result2);
-										echo '<tr>';
-										echo '<th scope="row">' . $tag_id . '</th>';
-										echo '<td>' . $tag . '</td>';
-										echo '<td>' . $num_posts . '</td>';
-										echo '<td><a href="edit_topic.php?id=' . $tag_id . '" class="btn btn-primary btn-sm">Edit</a> <a onclick="deleteTag(' . $tag_id . ')" class="btn btn-danger btn-sm">Delete</a></td>';
-										echo '</tr>';
-									}
-								} else {
-									echo '<tr>';
-									echo '<th scope="row">0</th>';
-									echo '<td>No topic</td>';
-									echo '<td>0</td>';
-									echo '<td><a href="./add_topic.php" class="btn btn-primary btn-sm">Add</a></td>';
-									echo '</tr>';
-								}
-								?>
+                // echo table
+                if ($resultCheck > 0) {
+                  // output data of each row
+                  $counter = 0;
+                  while ($row = mysqli_fetch_assoc($result)) {
+                    $counter += 1;
+                    $tag = $row['name'];
+                    $tag_id = $row['id'];
+                    $sql = "SELECT * FROM post WHERE topicID = '" . $tag_id . "'";
+                    $result2 = mysqli_query($conn, $sql);
+                    $num_posts = mysqli_num_rows($result2);
+                    echo '<tr>';
+                    echo '<th scope="row">' . $counter . '</th>';
+                    echo '<td>' . $tag . '</td>';
+                    echo '<td>' . $num_posts . '</td>';
+                    echo '<td><a href="edit_topic.php?id=' . $tag_id . '" class="btn btn-primary btn-sm">Edit</a> <a onclick="deleteTag(' . $tag_id . ')" class="btn btn-danger btn-sm">Delete</a></td>';
+                    echo '</tr>';
+                  }
+                } else {
+                  echo '<tr>';
+                  echo '<th scope="row">0</th>';
+                  echo '<td>No topic</td>';
+                  echo '<td>0</td>';
+                  echo '<td><a href="./add_topic.php" class="btn btn-primary btn-sm">Add</a></td>';
+                  echo '</tr>';
+                }
+                ?>
               </tbody>
               <script>
               function deleteTag(id) {
