@@ -39,7 +39,7 @@ if (!isset($_SESSION['isAdmin'])) {
         <div class="panel panel-default" style="padding: 12px;">
           <div class="panel-heading">
             <a href="/" class="btn btn-primary btn-sm">
-              <i class="bi bi-arrow-left"></i> Go back to home page
+              <i class="bi bi-arrow-left"></i> Go back to Admin Dashboard
             </a>
             <a href="./add_topic.php" class="btn btn-primary btn-sm">
               <i class="bi bi-plus"></i> Add new tag

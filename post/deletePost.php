@@ -2,63 +2,63 @@
 // session
 session_start();
 
-include '../connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
 
 // check for POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // get post id
-    $postID = $_POST['id'];
-    $reason = $_POST['reason'];
+	// get post id
+	$postID = $_POST['id'];
+	$reason = $_POST['reason'];
 
-    // verify that user is the same as the post's user
-    $sql = "SELECT * FROM post WHERE id = '" . $postID . "'";
-    $result = mysqli_query($conn, $sql);
+	// verify that user is the same as the post's user
+	$sql = "SELECT * FROM post WHERE id = '" . $postID . "'";
+	$result = mysqli_query($conn, $sql);
 
-    if (mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $postUser = $row['userID'];
-    } else {
-        echo 'Error: Post not found.';
-    }
+	if (mysqli_num_rows($result) > 0) {
+		$row = mysqli_fetch_assoc($result);
+		$postUser = $row['userID'];
+	} else {
+		echo 'Error: Post not found.';
+	}
 
-    if ($_SESSION['username'] != $postUser) {
-        // check isset session isAdmin
-        if (!isset($_SESSION['isAdmin'])) {
-            if ($_SESSION['isAdmin'] != 1) {
-                header("Location: ../403.php");
-                return;
-            }
-        }
-    }
+	if ($_SESSION['username'] != $postUser) {
+		// check isset session isAdmin
+		if (!isset($_SESSION['isAdmin'])) {
+			if ($_SESSION['isAdmin'] != 1) {
+				header("Location: /403.php");
+				return;
+			}
+		}
+	}
 
-    // sanitize id
-    $postID = strip_tags($postID);
-    $postID = mysqli_real_escape_string($conn, $postID);
+	// sanitize id
+	$postID = strip_tags($postID);
+	$postID = mysqli_real_escape_string($conn, $postID);
 
-    // delete post
-    $sql = "DELETE FROM post WHERE id = '$postID'";
-    $result = mysqli_query($conn, $sql);
+	// delete post
+	$sql = "DELETE FROM post WHERE id = '$postID'";
+	$result = mysqli_query($conn, $sql);
 
-    // if there is reason send notification to post's user about the deletion
-    if ($reason != '') {
-        // check session isAdmin true or not
-        if ($_SESSION['isAdmin'] == 1) {
-            // sanitize
-            $reason = strip_tags($reason);
-            $reason = mysqli_real_escape_string($conn, $reason);
+	// if there is reason send notification to post's user about the deletion
+	if ($reason != '') {
+		// check session isAdmin true or not
+		if ($_SESSION['isAdmin'] == 1) {
+			// sanitize
+			$reason = strip_tags($reason);
+			$reason = mysqli_real_escape_string($conn, $reason);
 
-            $sql = "INSERT INTO notification (userID, link, type, details) VALUES ('$postUser', '#', 'Post Deleted By Admin', '$reason')";
-            $result = mysqli_query($conn, $sql);
-        }
-    }
+			$sql = "INSERT INTO notification (userID, link, type, details) VALUES ('$postUser', '#', 'Post Deleted By Admin', '$reason')";
+			$result = mysqli_query($conn, $sql);
+		}
+	}
 
-    // check result, if error print error
-    if (!$result) {
-        $error = 'Error: ' . mysqli_error($conn);
-        echo $error;
-    } else {
-        echo 'success';
-    }
+	// check result, if error print error
+	if (!$result) {
+		$error = 'Error: ' . mysqli_error($conn);
+		echo $error;
+	} else {
+		echo 'success';
+	}
 } else {
-    header("Location: ../403.php");
+	header("Location: /403.php");
 }

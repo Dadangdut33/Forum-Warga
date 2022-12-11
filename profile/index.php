@@ -5,23 +5,8 @@
 // session
 session_start();
 
-include '../connection.php';
-
-// GET "user" from URL
-$user = $_GET['user'];
-
-// check if it exist in db or not
-$sql = "SELECT * FROM Users WHERE username = '" . $user . "'";
-$result = mysqli_query($conn, $sql);
-
-if (mysqli_num_rows($result) > 0) {
-    // if it exist, get the data
-    $row = mysqli_fetch_assoc($result);
-    $username = $row['username'];
-    $email = $row['email'];
-} else {
-    header("Location: ../404.php");
-}
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/fetchUserProfile.php';
 
 ?>
 
@@ -35,8 +20,8 @@ if (mysqli_num_rows($result) > 0) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
-  <link rel="stylesheet" href="../index.css">
-  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="/index.css">
+  <link rel="icon" href="/favicon.ico">
   <title><?php echo $username; ?>'s profile</title>
 </head>
 
@@ -46,7 +31,7 @@ if (mysqli_num_rows($result) > 0) {
       <div class="row bg-white">
         <div class="panel panel-default" style="padding: 12px;">
           <div class="panel-heading">
-            <a href="../" class="btn btn-primary btn-sm">
+            <a href="/" class="btn btn-primary btn-sm">
               <i class="bi bi-arrow-left"></i> Go back home
             </a>
           </div>
@@ -59,7 +44,7 @@ if (mysqli_num_rows($result) > 0) {
               <h4>At <?php echo $email ?></h4>
             </div>
             <div class="d-flex justify-content-center">
-              <a href="../?by=<?php echo $username; ?>">Click to see <?php echo $username; ?>'s
+              <a href="/?by=<?php echo $username; ?>">Click to see <?php echo $username; ?>'s
                 posts</a>
             </div>
           </div>

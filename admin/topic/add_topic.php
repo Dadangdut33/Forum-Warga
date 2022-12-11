@@ -7,38 +7,38 @@ session_start();
 
 // check isAdmin or not
 if (!isset($_SESSION['isAdmin'])) {
-    header("Location: ../403.php");
+	header("Location: /403.php");
 } else {
-    if ($_SESSION['isAdmin'] == 0) {
-        header("Location: ../403.php");
-    }
+	if ($_SESSION['isAdmin'] == 0) {
+		header("Location: /403.php");
+	}
 }
 
 // conn
-include '../connection.php';
+include $_SERVER['DOCUMENT_ROOT'] .  '/connection.php';
 
 
 // check for POST request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // get the data
-    $name = $_POST['name'];
+	// get the data
+	$name = $_POST['name'];
 
-    // sanitize input
-    $name = strip_tags($name);
-    $name = mysqli_real_escape_string($conn, $name);
+	// sanitize input
+	$name = strip_tags($name);
+	$name = mysqli_real_escape_string($conn, $name);
 
-    // insert the new tag
-    $sql = "INSERT INTO topic (name) VALUES ('$name')";
-    $result = mysqli_query($conn, $sql);
+	// insert the new tag
+	$sql = "INSERT INTO topic (name) VALUES ('$name')";
+	$result = mysqli_query($conn, $sql);
 
-    // check result, if error print error
-    if (!$result) {
-        $error = 'Error: ' . mysqli_error($conn);
-        echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-    } else {
-        // redirect to admin menu
-        header("Location: ./index");
-    }
+	// check result, if error print error
+	if (!$result) {
+		$error = 'Error: ' . mysqli_error($conn);
+		echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+	} else {
+		// redirect to admin menu
+		header("Location: ./index");
+	}
 }
 
 ?>
@@ -53,8 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
-  <link rel="stylesheet" href="../index.css">
-  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="/index.css">
+  <link rel="icon" href="/favicon.ico">
   <title>Add Topic</title>
 </head>
 

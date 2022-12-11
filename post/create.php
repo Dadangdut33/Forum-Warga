@@ -6,47 +6,47 @@
 session_start();
 
 // conn
-include '../connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
 
 // check for post request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  // get the data
-  $title = $_POST['title'];
-  $content = $_POST['content'];
-  $topic = $_POST['topic'];
-  $user = $_SESSION['username'];
+	// get the data
+	$title = $_POST['title'];
+	$content = $_POST['content'];
+	$topic = $_POST['topic'];
+	$user = $_SESSION['username'];
 
-  // check if title and content is empty
-  if (empty($title) || empty($content)) {
-    echo '<div class="alert alert-danger" role="alert">Title and Content cannot be empty</div>';
-  } else {
-    // strip tags
-    $title = strip_tags($title);
-    $content = strip_tags($content);
-    $topic = strip_tags($topic);
+	// check if title and content is empty
+	if (empty($title) || empty($content)) {
+		echo '<div class="alert alert-danger" role="alert">Title and Content cannot be empty</div>';
+	} else {
+		// strip tags
+		$title = strip_tags($title);
+		$content = strip_tags($content);
+		$topic = strip_tags($topic);
 
-    // real escape string
-    $title = mysqli_real_escape_string($conn, $title);
-    $content = mysqli_real_escape_string($conn, $content);
-    $topic = mysqli_real_escape_string($conn, $topic);
+		// real escape string
+		$title = mysqli_real_escape_string($conn, $title);
+		$content = mysqli_real_escape_string($conn, $content);
+		$topic = mysqli_real_escape_string($conn, $topic);
 
-    // insert data into db
-    $sql = "INSERT INTO post (title, content, userID, topicID) VALUES ('$title', '$content', '$user', '$topic')";
-    $result = mysqli_query($conn, $sql);
+		// insert data into db
+		$sql = "INSERT INTO post (title, content, userID, topicID) VALUES ('$title', '$content', '$user', '$topic')";
+		$result = mysqli_query($conn, $sql);
 
-    // check result, if error print error
-    if (!$result) {
-      $error = 'Error: ' . mysqli_error($conn);
-      echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-    } else {
-      // echo success
-      echo '<div class="alert alert-success" role="alert">Successfully created a new post</div>';
-      // echo you will be redirected in 3 seconds
-      echo '<div class="alert alert-info" role="alert">You will be redirected in 3 seconds to the new post</div>';
-      // redirect to new post
-      header('refresh: 3; url=../post/?id=' . mysqli_insert_id($conn));
-    }
-  }
+		// check result, if error print error
+		if (!$result) {
+			$error = 'Error: ' . mysqli_error($conn);
+			echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+		} else {
+			// echo success
+			echo '<div class="alert alert-success" role="alert">Successfully created a new post</div>';
+			// echo you will be redirected in 3 seconds
+			echo '<div class="alert alert-info" role="alert">You will be redirected to the new post</div>';
+			// redirect to new post
+			header('refresh: 1; url=/post/?id=' . mysqli_insert_id($conn));
+		}
+	}
 }
 
 ?>
@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
-  <link rel="stylesheet" href="../index.css">
-  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="/index.css">
+  <link rel="icon" href="/favicon.ico">
   <title>Create Forum Post</title>
 </head>
 
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="row bg-white">
         <div class="panel panel-default" style="padding: 12px;">
           <div class="panel-heading">
-            <a href="../" class="btn btn-primary btn-sm">
+            <a href="/" class="btn btn-primary btn-sm">
               <i class="bi bi-arrow-left"></i> Go back home
             </a>
             <div class="text-center">
@@ -96,18 +96,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <select class="form-control" name="topic" id="topic" required>
                   <option value="" hidden disabled selected>Select a topic</option>
                   <?php
-                  $sql = "SELECT * FROM topic";
-                  $result = mysqli_query($conn, $sql);
+									$sql = "SELECT * FROM topic";
+									$result = mysqli_query($conn, $sql);
 
-                  // check result length
-                  if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                      echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
-                    }
-                  } else {
-                    echo '<option value="No Topic">No Topic</option>';
-                  }
-                  ?>
+									// check result length
+									if (mysqli_num_rows($result) > 0) {
+										while ($row = mysqli_fetch_assoc($result)) {
+											echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+										}
+									} else {
+										echo '<option value="No Topic">No Topic</option>';
+									}
+									?>
                 </select>
               </div>
               <div class="d-flex justify-content-center">

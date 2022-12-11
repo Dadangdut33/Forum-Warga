@@ -7,10 +7,11 @@ session_start();
 
 // check if user is already logged in
 if (isset($_SESSION['username'])) {
-    header("Location: ../");
+	header("Location: /");
 }
 
-include '../connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
+
 ?>
 
 <head>
@@ -22,84 +23,84 @@ include '../connection.php';
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
-  <link rel="stylesheet" href="../index.css">
-  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="/index.css">
+  <link rel="icon" href="/favicon.ico">
   <title>Register</title>
 </head>
 
 <body>
   <main class="center-vertical-horizontal">
     <?php
-        // check for POST
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // check for empty fields
-            if (empty($_POST['email']) || empty($_POST['password']) || empty($_POST['password_confirmation']) || empty($_POST['username'])) {
-                $error = 'Please fill in all the fields';
-                echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-            } else {
-                // check if email is valid
-                if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-                    $error = 'Please enter a valid email';
-                    echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-                } else {
-                    // check if username already exists in database
-                    $sql = "SELECT * FROM Users WHERE username = '" . $_POST['username'] . "'";
-                    $result = mysqli_query($conn, $sql);
+		// check for POST
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			// check for empty fields
+			if (empty($_POST['email']) || empty($_POST['password']) || empty($_POST['password_confirmation']) || empty($_POST['username'])) {
+				$error = 'Please fill in all the fields';
+				echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+			} else {
+				// check if email is valid
+				if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+					$error = 'Please enter a valid email';
+					echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+				} else {
+					// check if username already exists in database
+					$sql = "SELECT * FROM Users WHERE username = '" . $_POST['username'] . "'";
+					$result = mysqli_query($conn, $sql);
 
-                    // check result, if error print error
-                    if (!$result) {
-                        $error = 'Error: ' . mysqli_error($conn);
-                        echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-                    } else {
-                        if (mysqli_num_rows($result) > 0) {
-                            // if Username exist, show error
-                            $error = 'Username already exists';
-                            echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-                        } else {
-                            // check if email exists in database
-                            $sql = "SELECT * FROM Users WHERE email = '" . $_POST['email'] . "'";
-                            $result = mysqli_query($conn, $sql);
-                            if (!$result) {
-                                $error = 'Error: ' . mysqli_error($conn);
-                                echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-                            } else {
-                                if (mysqli_num_rows($result) > 0) {
-                                    // if email exist, show error
-                                    $error = 'Email already exists';
-                                    echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-                                } else {
-                                    // if all is well, then insert into database
-                                    // sanitize input
-                                    $username = strip_tags($_POST['username']);
-                                    $email = strip_tags($_POST['email']);
-                                    $password = strip_tags($_POST['password']);
+					// check result, if error print error
+					if (!$result) {
+						$error = 'Error: ' . mysqli_error($conn);
+						echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+					} else {
+						if (mysqli_num_rows($result) > 0) {
+							// if Username exist, show error
+							$error = 'Username already exists';
+							echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+						} else {
+							// check if email exists in database
+							$sql = "SELECT * FROM Users WHERE email = '" . $_POST['email'] . "'";
+							$result = mysqli_query($conn, $sql);
+							if (!$result) {
+								$error = 'Error: ' . mysqli_error($conn);
+								echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+							} else {
+								if (mysqli_num_rows($result) > 0) {
+									// if email exist, show error
+									$error = 'Email already exists';
+									echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+								} else {
+									// if all is well, then insert into database
+									// sanitize input
+									$username = strip_tags($_POST['username']);
+									$email = strip_tags($_POST['email']);
+									$password = strip_tags($_POST['password']);
 
-                                    $username = mysqli_real_escape_string($conn, $username);
-                                    $email = mysqli_real_escape_string($conn, $email);
-                                    $password = mysqli_real_escape_string($conn, $password);
+									$username = mysqli_real_escape_string($conn, $username);
+									$email = mysqli_real_escape_string($conn, $email);
+									$password = mysqli_real_escape_string($conn, $password);
 
-                                    // hash the password first
-                                    $password = password_hash($password, PASSWORD_DEFAULT);
+									// hash the password first
+									$password = password_hash($password, PASSWORD_DEFAULT);
 
-                                    $sql = "INSERT INTO Users (username, email, password) VALUES ('" . $_POST['username'] . "', '" . $_POST['email'] . "', '" . $password . "')";
-                                    $result = mysqli_query($conn, $sql);
-                                    if (!$result) {
-                                        $error = 'Error: ' . mysqli_error($conn);
-                                        echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+									$sql = "INSERT INTO Users (username, email, password) VALUES ('" . $_POST['username'] . "', '" . $_POST['email'] . "', '" . $password . "')";
+									$result = mysqli_query($conn, $sql);
+									if (!$result) {
+										$error = 'Error: ' . mysqli_error($conn);
+										echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 
-            if (!isset($error)) {
-                // alert success with js
-                echo '<script>alert("Registration successful! You can now log in to your account");window.location.href="./login";</script>';
-            }
-        }
-        ?>
+			if (!isset($error)) {
+				// alert success with js
+				echo '<script>alert("Registration successful! You can now log in to your account");window.location.href="./login";</script>';
+			}
+		}
+		?>
     <div class="container">
       <div class="row bg-white">
         <div class="panel panel-default" style="padding: 12px;">

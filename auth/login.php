@@ -6,11 +6,9 @@
 session_start();
 
 // check if user is already logged in
-if (isset($_SESSION['username'])) {
-    header("Location: ../");
-}
+if (isset($_SESSION['username'])) header("Location: /");
 
-include '../connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
 ?>
 
 <head>
@@ -23,73 +21,73 @@ include '../connection.php';
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
-  <link rel="stylesheet" href="../index.css">
-  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="/index.css">
+  <link rel="icon" href="/favicon.ico">
   <title>Login</title>
 </head>
 
 <body>
   <main class="center-vertical-horizontal">
     <?php
-        // check for POST
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // check for empty fields
-            if (empty($_POST['username']) || empty($_POST['password'])) {
-                $error = 'Please fill in all the fields';
-                echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-            } else {
-                $username = $_POST['username'];
-                $password = $_POST['password'];
+		// check for POST
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			// check for empty fields
+			if (empty($_POST['username']) || empty($_POST['password'])) {
+				$error = 'Please fill in all the fields';
+				echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+			} else {
+				$username = $_POST['username'];
+				$password = $_POST['password'];
 
-                // strip tags
-                $username = strip_tags($username);
-                $password = strip_tags($password);
+				// strip tags
+				$username = strip_tags($username);
+				$password = strip_tags($password);
 
-                // sanitize input
-                $username = mysqli_real_escape_string($conn, $username);
-                $password = mysqli_real_escape_string($conn, $password);
+				// sanitize input
+				$username = mysqli_real_escape_string($conn, $username);
+				$password = mysqli_real_escape_string($conn, $password);
 
-                // check if email exists in database
-                $sql = "SELECT * FROM Users WHERE username = '" . $username . "'";
-                $result = mysqli_query($conn, $sql);
-                if (!$result) {
-                    $error = 'Error: ' . mysqli_error($conn);
-                    echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-                } else {
-                    if (mysqli_num_rows($result) > 0) {
-                        // check if password is correct
-                        $row = mysqli_fetch_assoc($result);
-                        if (password_verify($password, $row['password'])) {
-                            // set session
-                            $_SESSION['email'] = $row['email'];
-                            $_SESSION['username'] = $row['username'];
-                            $_SESSION['isAdmin'] = $row['isAdmin'];
-                        } else {
-                            $error = 'Password is incorrect!';
-                            echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-                        }
-                    } else {
-                        $error = 'Username does not exist';
-                        echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-                    }
-                }
-            }
+				// check if email exists in database
+				$sql = "SELECT * FROM Users WHERE username = '" . $username . "'";
+				$result = mysqli_query($conn, $sql);
+				if (!$result) {
+					$error = 'Error: ' . mysqli_error($conn);
+					echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+				} else {
+					if (mysqli_num_rows($result) > 0) {
+						// check if password is correct
+						$row = mysqli_fetch_assoc($result);
+						if (password_verify($password, $row['password'])) {
+							// set session
+							$_SESSION['email'] = $row['email'];
+							$_SESSION['username'] = $row['username'];
+							$_SESSION['isAdmin'] = $row['isAdmin'];
+						} else {
+							$error = 'Password is incorrect!';
+							echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+						}
+					} else {
+						$error = 'Username does not exist';
+						echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+					}
+				}
+			}
 
-            if (!isset($error)) {
-                // alert sucess with js
-                echo "<script>
-                alert('Login succesfull');
-                window.location.href='/';
-                </script>";
-            }
-        }
-        ?>
+			if (!isset($error)) {
+				// alert sucess with js
+				echo "<script>
+          alert('Login succesfull');
+          window.location.href='/';
+        </script>";
+			}
+		}
+		?>
 
     <div class="container">
       <div class="row bg-white">
         <div class="panel panel-default" style="padding: 12px;">
           <div class="panel-heading">
-            <a href="../" class="btn btn-primary btn-sm">
+            <a href="/" class="btn btn-primary btn-sm">
               <i class="bi bi-arrow-left"></i> Go back home
             </a>
             <h3 class="panel-title">Login</h3>
