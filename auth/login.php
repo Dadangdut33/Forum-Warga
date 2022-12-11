@@ -48,15 +48,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
 				$password = mysqli_real_escape_string($conn, $password);
 
 				// check if email exists in database
-				$sql = "SELECT * FROM Users WHERE username = '" . $username . "'";
-				$result = mysqli_query($conn, $sql);
-				if (!$result) {
+				$get = false;
+				$sqlQ = "SELECT * FROM Users WHERE username = '" . $username . "' OR email = '" . $username . "'";
+				$resultQ = mysqli_query($conn, $sqlQ);
+
+				if (!$resultQ) {
 					$error = 'Error: ' . mysqli_error($conn);
 					echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
 				} else {
-					if (mysqli_num_rows($result) > 0) {
+					if (mysqli_num_rows($resultQ) > 0) {
 						// check if password is correct
-						$row = mysqli_fetch_assoc($result);
+						$row = mysqli_fetch_assoc($resultQ);
 						if (password_verify($password, $row['password'])) {
 							// set session
 							$_SESSION['email'] = $row['email'];
@@ -67,7 +69,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
 							echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
 						}
 					} else {
-						$error = 'Username does not exist';
+						$error = 'Username or email does not exist';
 						echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
 					}
 				}
@@ -98,7 +100,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
           <div class="panel-body">
             <form action="" method="post">
               <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username">Username or Email</label>
                 <input type="username" class="form-control" name="username" id="username" placeholder="username"
                   required>
               </div>

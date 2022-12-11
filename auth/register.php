@@ -113,10 +113,11 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
           <div class="panel-body">
             <form action="" method="post" onsubmit="return checkPassword()">
               <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" name="email" id="email" placeholder="Email" inlength="3"
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" title="Please enter a valid email address"
-                  autocomplete="off" required>
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name="username" id="username" placeholder="username" required>
+              </div>
+              <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary center" style="margin-top: 10px; ">Register</button>
               </div>
               <div class="form-group">
                 <label for="password">Password</label>
@@ -131,11 +132,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
                   placeholder="Password Confirmation" required>
               </div>
               <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" name="username" id="username" placeholder="username" required>
-              </div>
-              <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary center" style="margin-top: 10px; ">Register</button>
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email" inlength="3"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" title="Please enter a valid email address"
+                  autocomplete="off" required>
               </div>
             </form>
           </div>
