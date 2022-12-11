@@ -1,7 +1,6 @@
 <?php
 
-// GET "user" from URL
-$user = $_GET['user'];
+$user = $_SESSION['username'];
 
 // sanitize $user
 $user = strip_tags($user);

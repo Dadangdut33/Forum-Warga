@@ -99,6 +99,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
               p.time as time,
               p.userID as userID,
               p.pinned as isPinned,
+              p.views as views,
               t.id as tID,
               t.name as tName 
               FROM post as p JOIN topic as t on t.id = p.topicID ORDER BY pinned DESC, time DESC;";
@@ -115,6 +116,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
               p.time as time,
               p.userID as userID,
               p.pinned as isPinned,
+              p.views as views,
               t.id as tID,
               t.name as tName 
               FROM post as p JOIN topic as t on t.id = p.topicID and userID="' . $by . '" ORDER BY pinned DESC, time DESC;';
@@ -129,6 +131,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
               p.time as time,
               p.userID as userID,
               p.pinned as isPinned,
+              p.views as views,
               t.id as tID,
               t.name as tName 
               FROM post as p JOIN topic as t on t.id = p.topicID and t.name="' . $topic . '" ORDER BY pinned DESC, time DESC;';
@@ -146,6 +149,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
               // get the number of comments of each post
               $post_id = $row['pID'];
               $isPinned = $row['isPinned'];
+              $views = $row['views'];
               $postTitle = $isPinned ? '<i class="bi bi-pin-angle"></i> ' . $row['title'] : $row['title'];
               $sql_comment = "SELECT * FROM comment WHERE postID = '$post_id'";
               $result_comment = mysqli_query($conn, $sql_comment);
@@ -176,7 +180,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
                   <div class="col-md-4 op-7">
                     <div class="row text-center op-7">
                       <div class="col px-1"> </div>
-                      <div class="col px-1"> </div>
+                      <div class="col px-1"> 
+                        <i class="ion-ios-eye-outline icon-1x"></i> 
+                        <span class="d-block text-sm">' . $views . ' Views</span>
+                      </div>
                       <div class="col px-1"> 
                         <i class="ion-ios-chatboxes-outline icon-1x"></i> 
                         <span class="d-block text-sm">' . $result_comment_totals . ' Replies</span>

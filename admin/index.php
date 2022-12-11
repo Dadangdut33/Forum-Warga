@@ -85,11 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="mx-auto">
               <div>
                 <!-- btn to topic menu -->
-                <a href="/admin/topic" class="btn btn-primary btn-sm">
+                <a href="/admin/topic" class="btn btn-secondary btn-sm">
                   <i class="bi bi-book-fill"></i> Topics Menu
                 </a>
                 <!-- btn to user menu -->
-                <a href="/admin/user" class="btn btn-primary btn-sm">
+                <a href="/admin/user" class="btn btn-info btn-sm">
                   <i class="bi bi-people-fill"></i> User Management
                 </a>
               </div>

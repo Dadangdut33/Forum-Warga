@@ -46,6 +46,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkAdmin.php';
                   <th scope="col">#</th>
                   <th scope="col">Username</th>
                   <th scope="col">Email</th>
+                  <th scope="col">Admin</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
@@ -71,11 +72,18 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkAdmin.php';
                     $counter += 1;
                     $username = $row['username'];
                     $email = $row['email'];
+                    $admin = $row['isAdmin'] ? "Yes" : "No";
                     echo '<tr>';
                     echo '<th scope="row">' . $counter . '</th>';
                     echo '<td>' . $username . '</td>';
                     echo '<td>' . $email . '</td>';
-                    echo '<td><a href="edit_user.php?username=' . $username . '" class="btn btn-primary btn-sm">Edit</a> <a onclick="deleteUser(' . $username . ')" class="btn btn-danger btn-sm">Delete</a></td>';
+                    echo '<td>' . $admin . '</td>';
+                    echo '
+                    <td>
+                      <a href="edit_user.php?username=' . $username . '" class="btn btn-primary btn-sm">Edit</a> 
+                      <a onclick="deleteUser(\'' . $username . '\')" class="btn btn-danger btn-sm">Delete</a>
+                      <a onclick="changePassword(\'' . $username . '\')" class="btn btn-warning btn-sm">Change Password</a>
+                    </td>';
                     echo '</tr>';
                   }
                 } else {
@@ -107,6 +115,42 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/checkAdmin.php';
                       }
                     }
                   });
+                }
+              }
+
+              function changePassword(id) {
+                if (confirm("Are you sure you want to change password of this user?")) {
+                  // prompt password
+                  const password = prompt("Please enter new password", "");
+
+                  // confirm password
+                  if (password != null) {
+                    // ask confirmation with the password inputted
+                    if (confirm("Are you sure you want to change password of this user to " + password + "?")) {
+                      // send ajax request
+                      $.ajax({
+                        url: "./reset_password",
+                        method: "POST",
+                        data: {
+                          id: id,
+                          password: password
+                        },
+                        success: function(data) {
+                          if (data == "success") {
+                            alert("Password changed successfully");
+                            // reload page
+                            location.reload();
+                          } else {
+                            alert(data);
+                          }
+                        }
+                      });
+                    } else {
+                      alert("Password change cancelled");
+                    }
+                  } else {
+                    alert("Password change cancelled");
+                  }
                 }
               }
               </script>

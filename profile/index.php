@@ -34,6 +34,15 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/fetchUserProfile.php';
             <a href="/" class="btn btn-primary btn-sm">
               <i class="bi bi-arrow-left"></i> Go back home
             </a>
+            <?php
+            // if the user is logged in and the user is the same as the profile, add btn to redirect to edit_bio
+            if (isset($_SESSION['username']) && $_SESSION['username'] == $username) {
+              echo '<a href="/profile/edit_bio" class="btn btn-secondary btn-sm">
+                <i class="bi bi-pencil"></i> Edit bio
+              </a>';
+            }
+            ?>
+
           </div>
           <div class="panel-body">
             <div class="d-flex justify-content-center">
@@ -46,6 +55,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/fetchUserProfile.php';
             <div class="d-flex justify-content-center">
               <a href="/?by=<?php echo $username; ?>">Click to see <?php echo $username; ?>'s
                 posts</a>
+            </div>
+            <div class="d-flex justify-content-center mt-2">
+              <p><?php echo $bio; ?></p>
             </div>
           </div>
         </div>

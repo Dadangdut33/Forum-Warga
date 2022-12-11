@@ -19,6 +19,7 @@ if (isset($_GET['id'])) {
             p.time as time,
             p.userID as userID,
             p.pinned as isPinned,
+            p.views as views,
             t.id as tID,
             t.name as tName  
             FROM post as p JOIN topic as t ON p.topicID = t.id and p.id = $id";
@@ -42,6 +43,7 @@ if (isset($_GET['id'])) {
   $content = $result['content'];
   $topic = $result['tName'];
   $isPinned = $result['isPinned'];
+  $views = $result['views'] + 1;
   $user = $result['userID'];
   $time = $result['time'];
 
@@ -57,6 +59,10 @@ if (isset($_GET['id'])) {
 
   // get ammount of comments from the result get
   $commentAmmount = mysqli_num_rows($resultComment);
+
+  // update post view
+  $sql = "UPDATE post SET views = views + 1 WHERE id = $id";
+  $result = mysqli_query($conn, $sql);
 } else {
   // throw 404 if id not get
   header("Location: /404.php");
@@ -181,6 +187,7 @@ if (isset($_GET['id'])) {
                 <i class="bi bi-person"></i> <a href="/profile/?user=<?php echo $user ?>"><?php echo $user ?></a>
                 <i class="bi bi-tag" style="padding-left: 5px;"></i> <a
                   href="/topic/topic=<?php echo $topic ?>"><?php echo $topic ?></a>
+                <i class="bi bi-eye" style="padding-left: 5px;"></i> <?php echo $views ?>
                 <i class="bi bi-clock" style="padding-left: 5px;"></i> <?php echo $time ?>
               </figcaption>
             </div>
