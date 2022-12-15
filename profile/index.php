@@ -53,7 +53,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/fetchUserProfile.php';
               <h4>At <?php echo $email ?></h4>
             </div>
             <div class="d-flex justify-content-center">
-              <a href="/?by=<?php echo $username; ?>">Click to see <?php echo $username; ?>'s
+              <a class="btn btn-primary" href="/?by=<?php echo $username; ?>">See <?php echo $username; ?>'s
                 posts</a>
             </div>
             <div class="d-flex justify-content-center mt-2">

@@ -29,135 +29,114 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
 </head>
 
 <body>
-  <main style="margin-top: 150px">
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/navbar.php' ?>
+  <main style="margin-top: 50px">
     <div class="container">
       <div class="row">
-        <div class="col-lg-9 mb-3">
-          <div class="row text-left mb-5">
-            <div class="col-lg-6 mb-3 mb-sm-0">
-              <div class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50"
-                style="width: 100%;">
-                <select class="form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50" data-toggle="select"
-                  tabindex="-98" id="dynamic_select">
-                  <option value="/"> All </option>
-                  <?php
-                  // check for GET request named "topic"
-                  if (isset($_GET['topic'])) {
-                    // if found, get the value
-                    $topic = $_GET['topic'];
-                    $topic = strip_tags($topic);
-                    $topic = mysqli_real_escape_string($conn, $topic);
-                    echo '<option value="/?topic=' . $topic . '" selected hidden>' . $topic . '</option>';
-                  } else if (isset($_GET['by'])) {
-                    // if found, get the value
-                    $by = $_GET['by'];
-                    $by = strip_tags($by);
-                    $by = mysqli_real_escape_string($conn, $by);
-                    echo '<option value="/?by=' . $by . '" selected hidden>Seeing post made by ' . $by . '</option>';
-                  }
+        <?php
+        if (isset($_SESSION['username'])) {
+          echo '<div class="col-lg-8 mb-3 me-3">';
+        } else {
+          echo '<div class="col-lg-12 mb-3">';
+        }
+        ?>
+        <div class="row text-left mb-5">
+          <div class="col-lg-6 mb-3 mb-sm-0">
+            <div class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50"
+              style="width: 100%;">
+              <select class="form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50" data-toggle="select"
+                tabindex="-98" id="dynamic_select">
+                <option value="/"> All </option>
+                <?php
+                // check for GET request named "topic"
+                if (isset($_GET['topic'])) {
+                  // if found, get the value
+                  $topic = $_GET['topic'];
+                  $topic = strip_tags($topic);
+                  $topic = mysqli_real_escape_string($conn, $topic);
+                  echo '<option value="/?topic=' . $topic . '" selected hidden>' . $topic . '</option>';
+                } else if (isset($_GET['by'])) {
+                  // if found, get the value
+                  $by = $_GET['by'];
+                  $by = strip_tags($by);
+                  $by = mysqli_real_escape_string($conn, $by);
+                  echo '<option value="/?by=' . $by . '" selected hidden>Seeing post made by ' . $by . '</option>';
+                }
 
-                  // get all topics from db
-                  $sql = "SELECT * FROM topic";
-                  $result = mysqli_query($conn, $sql);
-                  while ($row = mysqli_fetch_assoc($result)) {
-                    echo '<option value="/?topic=' . $row['name'] . ' "> ' . $row['name'] . '</option>';
+                // get all topics from db
+                $sql = "SELECT * FROM topic";
+                $result = mysqli_query($conn, $sql);
+                while ($row = mysqli_fetch_assoc($result)) {
+                  echo '<option value="/?topic=' . $row['name'] . ' "> ' . $row['name'] . '</option>';
+                }
+                ?>
+              </select>
+              <script>
+              $(function() {
+                // bind change event to select
+                $('#dynamic_select').on('change', function() {
+                  var url = $(this).val(); // get selected value
+                  if (url) { // require a URL
+                    window.location = url; // redirect
                   }
-                  ?>
-                </select>
-                <script>
-                $(function() {
-                  // bind change event to select
-                  $('#dynamic_select').on('change', function() {
-                    var url = $(this).val(); // get selected value
-                    if (url) { // require a URL
-                      window.location = url; // redirect
-                    }
-                    return false;
-                  });
+                  return false;
                 });
-                </script>
-              </div>
-            </div>
-            <div class=" col-lg-6 text-lg-right">
-              <div
-                class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50"
-                style="width: 100%;">
-                <select class="form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50"
-                  data-toggle="select" tabindex="-98" disabled>
-                  <option id="time"> Date Time </option>
-                </select>
-              </div>
+              });
+              </script>
             </div>
           </div>
-          <div
-            class="card row-hover pos-relative py-3 px-3 mb-3 border-primary border-top-1 border-right-1 border-bottom-1 rounded-0">
-            <div class="row align-items-center">
-              <h1>About</h1>
-              <p>
-                A forum website inteded to be used as a platform for people to discuss about anything they want.
-              </p>
+          <div class=" col-lg-6 text-lg-right">
+            <div class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50"
+              style="width: 100%;">
+              <select class="form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50" data-toggle="select"
+                tabindex="-98" disabled>
+                <option id="time"> Date Time </option>
+              </select>
             </div>
-
-            <figcaption class="blockquote-footer" style="margin-top: 3px;">
-              <a href="/">Click to go back to home page</a>
-            </figcaption>
           </div>
-
         </div>
-        <!-- Sidebar content -->
-        <div class="col-lg-3 mb-4 mb-lg-0 px-lg-0 mt-lg-0">
-          <div
-            style="visibility: hidden; display: none; width: 285px; height: 801px; margin: 0px; float: none; position: static; inset: 85px auto auto;">
+        <div
+          class="card row-hover pos-relative py-3 px-3 mb-3 border-primary border-top-1 border-right-1 border-bottom-1 rounded-0">
+          <div class="row align-items-center">
+            <h1>About</h1>
+            <p>
+              A forum website inteded to be used as a platform for people to discuss about anything they want.
+            </p>
           </div>
-          <div data-toggle="sticky" class="sticky" style="top: 85px;">
-            <div class="sticky-inner">
-              <h1 class="btn btn-lg btn-block btn-success rounded-0 py-4 mb-3 bg-op-6 roboto-bold"
-                style="margin-bottom: 32px !important;" onclick="window.location.href='/'">
-                Forum Warga
-                <?php echo $forumName ?>
-              </h1>
-              <div class="bg-white mb-3">
-                <div class="pos-relative px-3 py-3">
-                  <?php
-                  // check if user is logged in or not
-                  if (isset($_SESSION['username'])) {
-                    // if user is logged in, show the logout button
-                    echo '<a href="post/create.php" class="btn btn-outline-primary btn-block rounded-0 py-3 mb-3 bg-op-6 roboto-bold">Create Post</a>';
-                    echo '<a href="auth/logout.php" class="btn btn-danger btn-sm rounded-0 py-3 mb-3 bg-op-6 roboto-bold" style="margin-left: 5px;">Logout</a>';
-                  } else {
-                    // if user is not logged in, show the login button
-                    echo '<a href="auth/login.php" class="btn btn-outline-primary btn-block rounded-0 py-3 mb-3 bg-op-6 roboto-bold">Login</a>';
-                    echo '<a href="auth/register.php" class="btn btn-outline-primary btn-block rounded-0 py-3 mb-3 bg-op-6 roboto-bold" style="margin-left: 5px;">Register</a>';
-                  }
-                  ?>
 
-                  <br />
-                  <a href="/about.php"
-                    class="btn btn-outline-primary btn-block rounded-0 py-3 mb-3 bg-op-6 roboto-bold">About</a>
-                  <a href="/faq.php"
-                    class="btn btn-outline-primary btn-block rounded-0 py-3 mb-3 bg-op-6 roboto-bold">FAQ</a>
-                </div>
-              </div>
-              <?php
-              // check if user is logged in or not
-              if (isset($_SESSION['username'])) {
-                // get amount of user posts
-                $sql = "SELECT COUNT(*) AS total FROM post WHERE userId = '" . $_SESSION['username'] . "'";
-                $result = mysqli_query($conn, $sql);
-                $row = mysqli_fetch_assoc($result);
-                $total = $row['total'];
+          <figcaption>
+            <a class="btn btn-primary" href="/">Back to Home Page</a>
+          </figcaption>
+        </div>
 
-                // get amount of user notifcations
-                $sql = "SELECT COUNT(*) AS total FROM notification WHERE userId = '" . $_SESSION['username'] . "' AND isRead = 0";
-                $result = mysqli_query($conn, $sql);
-                $row = mysqli_fetch_assoc($result);
-                $totalNotif = $row['total'];
+      </div>
+      <!-- Sidebar content -->
+      <div class="col-lg-3 mb-4 mb-lg-0 px-lg-0 mt-lg-0">
+        <div
+          style="visibility: hidden; display: none; width: 285px; height: 801px; margin: 0px; float: none; position: static; inset: 85px auto auto;">
+        </div>
+        <div data-toggle="sticky" class="sticky" style="top: 85px;">
+          <div class="sticky-inner">
+            <?php
+            // check if user is logged in or not
+            if (isset($_SESSION['username'])) {
+              // get amount of user posts
+              $sql = "SELECT COUNT(*) AS total FROM post WHERE userId = '" . $_SESSION['username'] . "'";
+              $result = mysqli_query($conn, $sql);
+              $row = mysqli_fetch_assoc($result);
+              $total = $row['total'];
 
-                // if user is logged in, show the logout button
-                echo '
+              // get amount of user notifcations
+              $sql = "SELECT COUNT(*) AS total FROM notification WHERE userId = '" . $_SESSION['username'] . "' AND isRead = 0";
+              $result = mysqli_query($conn, $sql);
+              $row = mysqli_fetch_assoc($result);
+              $totalNotif = $row['total'];
+
+              // if user is logged in, show the logout button
+              echo '
                 <div class="bg-white text-sm">
                   <h4 class="px-3 py-4 op-5 m-0 roboto-bold">
-                      Your Profile
+                      Dashboard
                   </h4>
                   <hr class="my-0" />
                   <div class="row text-center d-flex flex-row op-7 mx-0">
@@ -168,31 +147,13 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
                       <a class="d-block lead font-weight-bold" href="/profile/notification.php?user=' . $_SESSION['username'] . '">' . $totalNotif . '</a> 
                       Unread Notification 
                     </div>
-                  </div>
-                  <div class="row text-center d-flex flex-row op-7 mx-0">
-                    <div class="col-sm-6 col flex-ew text-center py-3 border-bottom mx-0"> 
-                      <a class="d-block lead font-weight-bold" href="/profile/?user=' . $_SESSION['username'] . '">' . $_SESSION['username'] . '</a> User 
-                    </div>';
-
-                // check isAdmin or not
-                if ($_SESSION['isAdmin'] == 1) {
-                  echo '
-                    <div class="col-sm-6 col flex-ew text-center py-3 border-bottom mx-0"> 
-                      <a class="d-block lead font-weight-bold" href="/admin">Admin</a>Admin Menu
-                    </div>
-                  </div>
-                </div>';
-                } else {
-                  echo '
-                  </div>
-                </div>';
-                }
-              }
-              ?>
-            </div>
+                  </div>';
+            }
+            ?>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </main>
 

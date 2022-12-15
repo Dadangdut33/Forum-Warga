@@ -21,10 +21,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
   <link rel="stylesheet" href="/index.css">
   <link rel="icon" href="/favicon.ico">
@@ -112,10 +110,13 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
       <div class="row bg-white">
         <div class="panel panel-default" style="padding: 12px;">
           <div class="panel-heading">
+            <a href="/" class="btn btn-primary btn-sm">
+              <i class="bi bi-arrow-left"></i> Go back home
+            </a>
             <h3 class="panel-title">Register</h3>
             <figcaption class="blockquote-footer" style="margin-top: 3px;">
               <?php
-              if ($_SESSION['isAdmin'] == 1) {
+              if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 1) {
                 echo '<a href="/admin/user">Go back to user management panel</a>';
               } else {
                 echo 'Already have an account? <a href="login.php">Login</a>';
@@ -130,22 +131,16 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
                 <input type="text" class="form-control" name="username" id="username" placeholder="username" required>
               </div>
               <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email" inlength="3" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" title="Please enter a valid email address" autocomplete="off" required>
+              </div>
+              <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" id="password"
-                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                  title="Password must containt lowercase, uppercase, number, and minimal of 8 characters"
-                  placeholder="Password" min="8" required>
+                <input type="password" class="form-control" name="password" id="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Password must containt lowercase, uppercase, number, and minimal of 8 characters" placeholder="Password" min="8" required>
               </div>
               <div class="form-group">
                 <label for="password_confirmation">Password Confirmation</label>
-                <input type="password" class="form-control" name="password_confirmation" id="password_confirmation"
-                  placeholder="Password Confirmation" required>
-              </div>
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" name="email" id="email" placeholder="Email" inlength="3"
-                  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$" title="Please enter a valid email address"
-                  autocomplete="off" required>
+                <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Password Confirmation" required>
               </div>
               <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary center" style="margin-top: 10px; ">Register</button>
@@ -156,16 +151,16 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
       </div>
     </div>
     <script>
-    // check password same as password validation or not
-    function checkPassword() {
-      var password = document.getElementById('password');
-      var password_confirmation = document.getElementById('password_confirmation');
-      if (password.value != password_confirmation.value) {
-        alert('Password is not the same with confirmation');
-        return false;
+      // check password same as password validation or not
+      function checkPassword() {
+        var password = document.getElementById('password');
+        var password_confirmation = document.getElementById('password_confirmation');
+        if (password.value != password_confirmation.value) {
+          alert('Password is not the same with confirmation');
+          return false;
+        }
+        return true;
       }
-      return true;
-    }
     </script>
   </main>
 
