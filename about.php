@@ -15,10 +15,13 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="index.css">
   <link rel="icon" href="/favicon.ico">
 
@@ -26,46 +29,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
 </head>
 
 <body>
-  <header>
-    <!-- Begin Navbar -->
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="/">Forum Warga</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav ms-auto me-5">
-            <a class="nav-link" aria-current="page" href="/faq.php">FAQ</a>
-            <a class="nav-link" href="/about.php">About</a>
-            <?php
-            if (isset($_SESSION['username'])) {
-              echo '<div class="dropdown">
-              <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">'
-                . $_SESSION['username'] .
-                '</button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="/profile/?user=' . $_SESSION['username'] . '">My Profile</a></li>'
-                . (($_SESSION['isAdmin'] == 1) ? '<li><a class="dropdown-item" href="/admin.php">Admin Menu</a></li>' : "") .
-                '
-              <li><a class="dropdown-item" href="/post/create.php">Create Post</a></li>
-              <li><a class="dropdown-item" href="/auth/logout.php">Logout</a></li>
-              </ul> ';
-            } else {
-              echo '
-                  <a class="nav-link" href="/auth/register.php">Register</a>
-                  <a class="nav-link" href="/auth/login.php">Login</a>
-                  ';
-            }
-            ?>
-          </div>
-        </div>
-      </div>
-      </div>
-      </div>
-    </nav>
-    <!-- End of Navbar -->
-  </header>
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/navbar.php' ?>
   <main style="margin-top: 50px">
     <div class="container">
       <div class="row">
@@ -78,8 +42,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
         ?>
         <div class="row text-left mb-5">
           <div class="col-lg-6 mb-3 mb-sm-0">
-            <div class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50" style="width: 100%;">
-              <select class="form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50" data-toggle="select" tabindex="-98" id="dynamic_select">
+            <div class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50"
+              style="width: 100%;">
+              <select class="form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50" data-toggle="select"
+                tabindex="-98" id="dynamic_select">
                 <option value="/"> All </option>
                 <?php
                 // check for GET request named "topic"
@@ -106,28 +72,31 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
                 ?>
               </select>
               <script>
-                $(function() {
-                  // bind change event to select
-                  $('#dynamic_select').on('change', function() {
-                    var url = $(this).val(); // get selected value
-                    if (url) { // require a URL
-                      window.location = url; // redirect
-                    }
-                    return false;
-                  });
+              $(function() {
+                // bind change event to select
+                $('#dynamic_select').on('change', function() {
+                  var url = $(this).val(); // get selected value
+                  if (url) { // require a URL
+                    window.location = url; // redirect
+                  }
+                  return false;
                 });
+              });
               </script>
             </div>
           </div>
           <div class=" col-lg-6 text-lg-right">
-            <div class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50" style="width: 100%;">
-              <select class="form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50" data-toggle="select" tabindex="-98" disabled>
+            <div class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50"
+              style="width: 100%;">
+              <select class="form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50" data-toggle="select"
+                tabindex="-98" disabled>
                 <option id="time"> Date Time </option>
               </select>
             </div>
           </div>
         </div>
-        <div class="card row-hover pos-relative py-3 px-3 mb-3 border-primary border-top-1 border-right-1 border-bottom-1 rounded-0">
+        <div
+          class="card row-hover pos-relative py-3 px-3 mb-3 border-primary border-top-1 border-right-1 border-bottom-1 rounded-0">
           <div class="row align-items-center">
             <h1>About</h1>
             <p>
@@ -143,7 +112,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
       </div>
       <!-- Sidebar content -->
       <div class="col-lg-3 mb-4 mb-lg-0 px-lg-0 mt-lg-0">
-        <div style="visibility: hidden; display: none; width: 285px; height: 801px; margin: 0px; float: none; position: static; inset: 85px auto auto;">
+        <div
+          style="visibility: hidden; display: none; width: 285px; height: 801px; margin: 0px; float: none; position: static; inset: 85px auto auto;">
         </div>
         <div data-toggle="sticky" class="sticky" style="top: 85px;">
           <div class="sticky-inner">
