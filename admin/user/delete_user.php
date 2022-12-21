@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $id = strip_tags($id);
   $id = mysqli_real_escape_string($conn, $id);
 
-  // delete the topic
-  $sql = "DELETE FROM topic WHERE id = '$id'";
+  // delete the user
+  $sql = "DELETE FROM users WHERE username = '$id'";
   $result = mysqli_query($conn, $sql);
 
   // check result, if error print error
