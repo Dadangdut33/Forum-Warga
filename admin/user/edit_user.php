@@ -104,9 +104,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               </div>
               <div class="mb-3">
                 <label for="isAdmin" class="form-label">Is Admin</label>
-                <select class="form-select" id="isAdmin" name="isAdmin">
-                  <option value="0" <?php if ($isAdmin == 0) echo 'selected'; ?>>No</option>
-                  <option value="1" <?php if ($isAdmin == 1) echo 'selected'; ?>>Yes</option>
+                <?php
+                if ($username == $_SESSION['username']) {
+                  echo '<select class="form-select" id="isAdmin" name="isAdmin" disabled>';
+                } else {
+                  echo '<select class="form-select" id="isAdmin" name="isAdmin">';
+                }
+                ?>
+                <option value="0" <?php if ($isAdmin == 0) echo 'selected'; ?>>No</option>
+                <option value="1" <?php if ($isAdmin == 1) echo 'selected'; ?>>Yes</option>
                 </select>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
