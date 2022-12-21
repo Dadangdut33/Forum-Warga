@@ -12,28 +12,33 @@
             <a class="nav-link" href="/about.php">About</a>
             <?php
             if (isset($_SESSION['username'])) {
-              echo '<div class="dropdown">
-              <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">'
-                . $_SESSION['username'] .
-                '</button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="/profile/?user=' . $_SESSION['username'] . '">My Profile</a></li>'
-                . (($_SESSION['isAdmin'] == 1) ? '<li><a class="dropdown-item" href="/admin.php">Admin Menu</a></li>' : "") .
+              echo '
+              <div class="dropdown">
+                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">' . $_SESSION['username'] . '</button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li>
+                    <a class="dropdown-item" href="/profile/?user=' . $_SESSION['username'] . '">My Profile</a>
+                  </li>' . (($_SESSION['isAdmin'] == 1) ? '<li>
+                    <a class="dropdown-item" href="/admin.php">Admin Menu</a>
+                  </li>' : "") .
                 '
-              <li><a class="dropdown-item" href="/post/create.php">Create Post</a></li>
-              <li><a class="dropdown-item" href="/auth/logout.php">Logout</a></li>
-              </ul> ';
+                  <li>
+                    <a class="dropdown-item" href="/post/create.php">Create Post</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="/auth/logout.php">Logout</a>
+                  </li>
+                </ul> 
+              </div>';
             } else {
               echo '
-                  <a class="nav-link" href="/auth/register.php">Register</a>
-                  <a class="nav-link" href="/auth/login.php">Login</a>
-                  ';
+              <a class="nav-link" href="/auth/register.php">Register</a>
+              <a class="nav-link" href="/auth/login.php">Login</a>
+              ';
             }
             ?>
           </div>
         </div>
-      </div>
-      </div>
       </div>
     </nav>
   </header>

@@ -147,13 +147,30 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
                       <a class="d-block lead font-weight-bold" href="/profile/notification.php?user=' . $_SESSION['username'] . '">' . $totalNotif . '</a> 
                       Unread Notification 
                     </div>
-                  </div>';
+                  </div>
+                </div>
+                ';
             }
             ?>
+            <div class="mt-1">
+              <script src="/helper/js/timer.js"> </script>
+              <div id="google_translate_element"></div>
+
+              <script type="text/javascript">
+              function googleTranslateElementInit() {
+                new google.translate.TranslateElement({
+                  pageLanguage: 'en',
+                  layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                }, 'google_translate_element');
+              }
+              </script>
+              <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+                type="text/javascript">
+              </script>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   </main>
 

@@ -51,6 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $topic = $_POST['topic'];
   $id = $_POST['id'];
 
+  if (!isset($_POST['pinned'])) {
+    $pinned = 1;
+  } else {
+    $pinned = 0;
+  }
+  $isAdmin = $_SESSION['isAdmin'];
+
   // get user of the post
   $sql = "SELECT userID FROM post WHERE id = '$id'";
   $result = mysqli_query($conn, $sql);
@@ -93,7 +100,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // update the post
-        $sql = "UPDATE post SET title = '$title', content = '$content', topicID = '$topic' WHERE id = '$id'";
+        if ($isAdmin) {
+          $sql = "UPDATE post SET title = '$title', content = '$content', topicID = '$topic', pinned = '$pinned' WHERE id = '$id'";
+        } else {
+          $sql = "UPDATE post SET title = '$title', content = '$content', topicID = '$topic' WHERE id = '$id'";
+        }
         $result = mysqli_query($conn, $sql);
 
         // check result, if error print error
@@ -141,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
           </div>
           <div class="panel-body">
-            <form action="" method="post">
+            <form action="" method="get">
               <input type="hidden" name="id" value="<?php echo $id ?>" />
               <div class="form-group">
                 <label for="title">Title</label>

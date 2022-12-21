@@ -43,7 +43,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
         ?>
 
         <div class="row text-left mb-5">
-
           <div class=" col-lg-6 text-lg-right">
             <div class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50"
               style="width: 100%;">
@@ -126,7 +125,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
               p.views as views,
               t.id as tID,
               t.name as tName 
-              FROM post as p JOIN topic as t on t.id = p.topicID ORDER BY pinned DESC, time DESC;";
+              FROM post as p JOIN topic as t on t.id = p.topicID ORDER BY p.pinned DESC, time DESC;";
 
       // check for get request "by" which indicates user id
       if (isset($_GET['by'])) {
@@ -143,7 +142,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
               p.views as views,
               t.id as tID,
               t.name as tName 
-              FROM post as p JOIN topic as t on t.id = p.topicID and userID="' . $by . '" ORDER BY pinned DESC, time DESC;';
+              FROM post as p JOIN topic as t on t.id = p.topicID and userID="' . $by . '" ORDER BY p.pinned DESC, time DESC;';
       } else if (isset($_GET['topic'])) {
         // if found, get the value
         $topic = $_GET['topic'];
@@ -158,7 +157,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
               p.views as views,
               t.id as tID,
               t.name as tName 
-              FROM post as p JOIN topic as t on t.id = p.topicID and t.name="' . $topic . '" ORDER BY pinned DESC, time DESC;';
+              FROM post as p JOIN topic as t on t.id = p.topicID and t.name="' . $topic . '" ORDER BY p.pinned DESC, time DESC;';
       }
 
       $result = mysqli_query($conn, $sql);
@@ -180,9 +179,11 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
           $result_comment_totals = mysqli_num_rows($result_comment);
 
           if ($isPinned) {
-            echo '<div class="card row-hover pos-relative py-3 px-3 mb-3 border-danger border-3 rounded-0">';
+            echo '
+              <div class="card row-hover pos-relative py-3 px-3 mb-3 border-danger border-3 rounded-0">'; // 1
           } else {
-            echo '<div class="card row-hover pos-relative py-3 px-3 mb-3 border-primary border-1 rounded-0">';
+            echo '
+              <div class="card row-hover pos-relative py-3 px-3 mb-3 border-primary border-1 rounded-0">'; // 1
           }
 
           echo '
@@ -215,7 +216,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
                     </div>
                   </div>
                 </div>
-              </div>';
+              </div>'; // 1
         }
       } else {
         echo '
@@ -250,7 +251,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
             $row = mysqli_fetch_assoc($result);
             $totalNotif = $row['total'];
 
-            // if user is logged in, show the logout button
+            // if user is logged in, show the dashboard
             echo '
                 <div class="bg-white text-sm">
                   <h4 class="px-3 py-4 op-5 m-0 roboto-bold">
@@ -266,17 +267,30 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
                       Unread Notification 
                     </div>
                   </div>
+                </div>
                 ';
           }
           ?>
+          <div class="mt-1">
+            <script src="/helper/js/timer.js"> </script>
+            <div id="google_translate_element"></div>
+
+            <script type="text/javascript">
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+              }, 'google_translate_element');
+            }
+            </script>
+            <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+              type="text/javascript">
+            </script>
+          </div>
         </div>
       </div>
     </div>
-    </div>
-    </div>
   </main>
-
-  <script src="/helper/js/timer.js"> </script>
 
 </body>
 

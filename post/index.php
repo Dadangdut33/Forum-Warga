@@ -75,8 +75,10 @@ if (isset($_GET['id'])) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <link rel="stylesheet" href="/index.css">
@@ -91,7 +93,8 @@ if (isset($_GET['id'])) {
         <div class="panel panel-default" style="padding: 12px;">
           <div class="panel-heading">
             <a href="/" class="btn btn-primary btn-sm">
-              <i class="bi bi-arrow-left"></i> Go back home</a>
+              <i class="bi bi-arrow-left"></i> Go back home
+            </a>
             <?php
             // edit and delete btn if poster is the same as user
             if (isset($_SESSION['username'])) {
@@ -114,67 +117,83 @@ if (isset($_GET['id'])) {
             }
             ?>
             <script>
-              function deletePostWithAjax(admin) {
-                var postID = <?php echo $id ?>;
-                var reason = "";
-                // if admin is true then ask for reason
-                if (admin) {
-                  reason = prompt("Please enter the reason for deleting this post");
+            function deletePostWithAjax(admin) {
+              var postID = <?php echo $id ?>;
+              var reason = "";
+              // if admin is true then ask for reason
+              if (admin) {
+                reason = prompt("Please enter the reason for deleting this post");
 
-                  // if reason is empty then show alert need to add reason
-                  if (reason == "") {
-                    alert("Please enter a correct reason for deleting this post!");
-                    return;
-                  }
-
-                  if (reason == null) {
-                    return;
-                  }
+                // if reason is empty then show alert need to add reason
+                if (reason == "") {
+                  alert("Please enter a correct reason for deleting this post!");
+                  return;
                 }
 
-                var result = confirm("Are you sure you want to delete this post?");
-                if (result) {
-                  $.ajax({
-                    url: "./deletePost",
-                    type: "POST",
-                    data: {
-                      id: postID,
-                      reason: reason
-                    },
-                    success: function(data) {
-                      if (data == "success") {
-                        alert("Post sucesfully deleted!");
-                        window.location.href = "/";
-                      } else {
-                        alert("Something went wrong!" + data);
-                      }
-                    }
-                  });
+                if (reason == null) {
+                  return;
                 }
               }
 
-              function postPinning(isPinned) {
-                var postID = <?php echo $id ?>;
-                var result = confirm(`Are you sure you want to ${isPinned === 1 ? "unpin" : "pin"} this post?`);
-                if (result) {
-                  $.ajax({
-                    url: isPinned === 1 ? "./unpinPost" : "./pinPost",
-                    type: "POST",
-                    data: {
-                      id: postID
-                    },
-                    success: function(data) {
-                      if (data == "success") {
-                        alert(`Post sucesfully ${isPinned === 1 ? "unpinned" : "pinned"}!`);
-                        window.location.reload();
-                      } else {
-                        alert("Something went wrong!" + data);
-                      }
+              var result = confirm("Are you sure you want to delete this post?");
+              if (result) {
+                $.ajax({
+                  url: "./deletePost",
+                  type: "POST",
+                  data: {
+                    id: postID,
+                    reason: reason
+                  },
+                  success: function(data) {
+                    if (data == "success") {
+                      alert("Post sucesfully deleted!");
+                      window.location.href = "/";
+                    } else {
+                      alert("Something went wrong!" + data);
                     }
-                  });
-                }
+                  }
+                });
               }
+            }
+
+            function postPinning(isPinned) {
+              var postID = <?php echo $id ?>;
+              var result = confirm(`Are you sure you want to ${isPinned === 1 ? "unpin" : "pin"} this post?`);
+              if (result) {
+                $.ajax({
+                  url: isPinned === 1 ? "./unpinPost" : "./pinPost",
+                  type: "POST",
+                  data: {
+                    id: postID
+                  },
+                  success: function(data) {
+                    if (data == "success") {
+                      alert(`Post sucesfully ${isPinned === 1 ? "unpinned" : "pinned"}!`);
+                      window.location.reload();
+                    } else {
+                      alert("Something went wrong!" + data);
+                    }
+                  }
+                });
+              }
+            }
             </script>
+            <div class="mt-1">
+              <script src="/helper/js/timer.js"> </script>
+              <div id="google_translate_element"></div>
+
+              <script type="text/javascript">
+              function googleTranslateElementInit() {
+                new google.translate.TranslateElement({
+                  pageLanguage: 'en',
+                  layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                }, 'google_translate_element');
+              }
+              </script>
+              <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+                type="text/javascript">
+              </script>
+            </div>
           </div>
           <div class="panel-body">
             <div class="d-flex justify-content-center">
@@ -183,7 +202,8 @@ if (isset($_GET['id'])) {
             <div class="d-flex justify-content-center">
               <figcaption class="blockquote-footer" style="margin-top: 1px;" id="no-before">
                 <i class="bi bi-person"></i> <a href="/profile/?user=<?php echo $user ?>"><?php echo $user ?></a>
-                <i class="bi bi-tag" style="padding-left: 5px;"></i> <a href="/?topic=<?php echo $topic ?>"><?php echo $topic ?></a>
+                <i class="bi bi-tag" style="padding-left: 5px;"></i> <a
+                  href="/?topic=<?php echo $topic ?>"><?php echo $topic ?></a>
                 <i class="bi bi-eye" style="padding-left: 5px;"></i> <?php echo $views ?>
                 <i class="bi bi-clock" style="padding-left: 5px;"></i> <?php echo $time ?>
               </figcaption>
@@ -295,44 +315,44 @@ if (isset($_GET['id'])) {
               }
               ?>
               <script>
-                function confirmDelComment() {
-                  var answer = confirm("Are you sure you want to delete this comment?");
-                  if (answer) {
-                    return true;
-                  } else {
-                    return false;
-                  }
+              function confirmDelComment() {
+                var answer = confirm("Are you sure you want to delete this comment?");
+                if (answer) {
+                  return true;
+                } else {
+                  return false;
+                }
+              }
+
+              function confirmDelAdmin(id) {
+                // prompt for reason
+                var reason = prompt("Please enter the reason for deleting this post");
+                if (reason == null) {
+                  return;
+                }
+                if (reason == "") {
+                  alert("You need to enter a valid reason!");
+                  return;
                 }
 
-                function confirmDelAdmin(id) {
-                  // prompt for reason
-                  var reason = prompt("Please enter the reason for deleting this post");
-                  if (reason == null) {
-                    return;
-                  }
-                  if (reason == "") {
-                    alert("You need to enter a valid reason!");
-                    return;
-                  }
-
-                  // send ajax jquery to ./deleteComment
-                  $.ajax({
-                    type: "POST",
-                    url: "./deleteComment",
-                    data: {
-                      id: id,
-                      reason: reason
-                    },
-                    success: function(data) {
-                      if (data == "success") {
-                        alert("Comment sucesfully deleted!");
-                        window.location.reload();
-                      } else {
-                        alert("Something went wrong!" + data);
-                      }
+                // send ajax jquery to ./deleteComment
+                $.ajax({
+                  type: "POST",
+                  url: "./deleteComment",
+                  data: {
+                    id: id,
+                    reason: reason
+                  },
+                  success: function(data) {
+                    if (data == "success") {
+                      alert("Comment sucesfully deleted!");
+                      window.location.reload();
+                    } else {
+                      alert("Something went wrong!" + data);
                     }
-                  });
-                }
+                  }
+                });
+              }
               </script>
             </ul>
           </div>

@@ -14,8 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // get the data
   $title = $_POST['title'];
   $content = $_POST['content'];
-  if (isset($_POST['pinned'])) {
-    $pinned = $_POST['pinned'];
+  if (!isset($_POST['pinned'])) {
+    $pinned = 1;
+  } else {
+    $pinned = 0;
   }
   $topic = $_POST['topic'];
   $user = $_SESSION['username'];
@@ -72,8 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
   <link rel="stylesheet" href="/index.css">
   <link rel="icon" href="/favicon.ico">
@@ -97,11 +101,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <form action="" method="post">
               <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" name="title" id="title" placeholder="title" minlength="5" maxlength="200" required>
+                <input type="text" class="form-control" name="title" id="title" placeholder="title" minlength="5"
+                  maxlength="200" required>
               </div>
               <div class="form-group">
                 <label for="content">Content</label>
-                <textarea class="form-control" name="content" id="content" rows="3" minlength="15" maxlength="5000" required></textarea>
+                <textarea class="form-control" name="content" id="content" rows="3" minlength="15" maxlength="5000"
+                  required></textarea>
               </div>
               <div class="form-group">
                 <label for="topic">Topic</label>
@@ -137,36 +143,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               </div>
             </form>
             <script>
-              function validateForm() {
-                var title = document.getElementById("title").value;
-                if (title == "") {
-                  alert("Title must be filled out");
-                  return false;
-                }
-                if (title > 200) {
-                  alert("Title must be less than 200 characters");
-                  return false;
-                }
-
-                // verify content
-                var content = document.getElementById("content").value;
-                if (content == "") {
-                  alert("Content must be filled out");
-                  return false;
-                }
-                if (content > 5000) {
-                  alert("Content must be less than 5000 characters");
-                  return false;
-                }
-
-                // verify select topic
-                var topic = document.getElementById("topic").value;
-                if (this.value == "") {
-                  alert("Please select a topic");
-                  return false;
-                }
-                return true;
+            function validateForm() {
+              var title = document.getElementById("title").value;
+              if (title == "") {
+                alert("Title must be filled out");
+                return false;
               }
+              if (title > 200) {
+                alert("Title must be less than 200 characters");
+                return false;
+              }
+
+              // verify content
+              var content = document.getElementById("content").value;
+              if (content == "") {
+                alert("Content must be filled out");
+                return false;
+              }
+              if (content > 5000) {
+                alert("Content must be less than 5000 characters");
+                return false;
+              }
+
+              // verify select topic
+              var topic = document.getElementById("topic").value;
+              if (this.value == "") {
+                alert("Please select a topic");
+                return false;
+              }
+              return true;
+            }
             </script>
           </div>
         </div>
