@@ -272,7 +272,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
           }
           ?>
           <div class="mt-1">
-            <script src="/helper/js/timer.js"> </script>
             <div id="google_translate_element"></div>
 
             <script type="text/javascript">
@@ -291,6 +290,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/connection.php';
       </div>
     </div>
   </main>
+
+  <script src="/helper/js/timer.js"> </script>
 
 </body>
 
