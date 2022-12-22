@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(300) NOT NULL,
   `email` varchar(100) NOT NULL,
   `isAdmin` tinyint(1) DEFAULT '0',
-  `bio` varchar(500) NOT NULL,
+  `bio` varchar(500) NOT NULL DEFAULT '',
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
