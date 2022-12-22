@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $topic = $_POST['topic'];
   $id = $_POST['id'];
 
-  if (!isset($_POST['pinned'])) {
+  if (isset($_POST['pinned'])) {
     $pinned = 1;
   } else {
     $pinned = 0;
@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
           </div>
           <div class="panel-body">
-            <form action="" method="get">
+            <form action="" method="post">
               <input type="hidden" name="id" value="<?php echo $id ?>" />
               <div class="form-group">
                 <label for="title">Title</label>

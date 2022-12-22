@@ -14,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // get the data
   $title = $_POST['title'];
   $content = $_POST['content'];
-  if (!isset($_POST['pinned'])) {
+  // on create check if pinned is send
+  if (isset($_POST['pinned'])) {
     $pinned = 1;
   } else {
     $pinned = 0;
