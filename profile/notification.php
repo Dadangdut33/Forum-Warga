@@ -60,7 +60,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] != $username) {
                 // check read or not if read then checkmark if not cross
                 $checkMark = ($row['isRead'] == 1) ? '<i class="bi bi-check-lg"></i>' : '<i class="bi bi-x-lg"></i>';
                 $showBtnCheck = ($row['isRead'] == 0) ? '<input type="submit" class="btn btn-primary btn-sm" value="Mark read" />' : '';
-                $link = ($row['link'] == '#') ? '#' : $_SERVER['DOCUMENT_ROOT'] . $row['link'];
+                $link = ($row['link'] == '#') ? '#' : "/" . $row['link'];
                 echo '
                 <li class="list-group-item d-flex justify-content-between align-items-start" id="no-before">
                   <div class="ms-2 me-auto">
