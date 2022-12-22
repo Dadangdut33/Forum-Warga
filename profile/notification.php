@@ -11,6 +11,13 @@ include $_SERVER['DOCUMENT_ROOT'] . '/helper/php/fetchUserProfile.php';
 // get user's notification
 $sql = "SELECT * FROM notification WHERE userID = '" . $username . "' ORDER BY time DESC";
 $result = mysqli_query($conn, $sql);
+
+// username must be the logged in user
+if (!isset($_SESSION['username']) || $_SESSION['username'] != $username) {
+  header("Location: /");
+  exit();
+}
+
 ?>
 
 <head>
