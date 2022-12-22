@@ -5,6 +5,26 @@
 3. [Cherrie Gracila Amanda (11200910000051)](https://github.com/cherrieamanda)
 4. [Ammar Sufyan (11200910000054)](https://github.com/neouranos)
 
+# Latar Belakang
+
+Banyaknya warga yang kurang terlibat dalam kegiatan-kegiatan yang bermanfaat bagi komunitas mereka. Hal ini menjadi masalah karena warga yang kurang terlibat tidak memiliki kesempatan untuk ikut membangun komunitas yang lebih baik.
+
+# Rumusan Masalah
+
+Bagaimana cara meningkatkan partisipasi warga dalam kegiatan-kegiatan yang bermanfaat bagi komunitas mereka melalui adanya platform diskusi online.
+
+# Batasan Masalah
+
+Proyek forum warga ini difokuskan pada pembuatan forum untuk wilayah Rukun Warga (RW) dan dibawahnya.
+
+# Tujuan 
+
+Website ini dibuat untuk membantu warga menjadi lebih terhubung satu sama lain, mengetahui apa yang terjadi di sekitar mereka, dan turut serta dalam menyelesaikan masalah-masalah yang ada di komunitas mereka.
+
+# Manfaat
+
+Dengan adanya forum warga ini, diharapkan warga akan lebih terlibat dalam kegiatan-kegiatan yang bermanfaat bagi masyarakat dan ikut membangun komunitas yang lebih baik.
+
 # Info
 
 Folder db berisi database yang digunakan, apabila ingin menjalankan projek silahkan import db nya terlebih dahulu atau jalankan query yang berada di [forum_sederhana.sql](db/forum_sederhana.sql).
