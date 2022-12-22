@@ -44,17 +44,17 @@ $result = mysqli_query($conn, $sql);
               </h1>
             </div>
             <?php
-						if (mysqli_num_rows($result) > 0) {
-							echo "
+            if (mysqli_num_rows($result) > 0) {
+              echo "
               <ul class='list-group list-group-numbered'>You have " . mysqli_num_rows($result) . " notification(s)
               ";
-							// loop through the data
-							while ($row = mysqli_fetch_assoc($result)) {
-								// check read or not if read then checkmark if not cross
-								$checkMark = ($row['isRead'] == 1) ? '<i class="bi bi-check-lg"></i>' : '<i class="bi bi-x-lg"></i>';
-								$showBtnCheck = ($row['isRead'] == 0) ? '<input type="submit" class="btn btn-primary btn-sm" value="Mark read" />' : '';
-								$link = ($row['link'] == '#') ? '#' : $root . $row['link'];
-								echo '
+              // loop through the data
+              while ($row = mysqli_fetch_assoc($result)) {
+                // check read or not if read then checkmark if not cross
+                $checkMark = ($row['isRead'] == 1) ? '<i class="bi bi-check-lg"></i>' : '<i class="bi bi-x-lg"></i>';
+                $showBtnCheck = ($row['isRead'] == 0) ? '<input type="submit" class="btn btn-primary btn-sm" value="Mark read" />' : '';
+                $link = ($row['link'] == '#') ? '#' : $_SERVER['DOCUMENT_ROOT'] . $row['link'];
+                echo '
                 <li class="list-group-item d-flex justify-content-between align-items-start" id="no-before">
                   <div class="ms-2 me-auto">
                     <div class="fw-bold">' . $row['type'] . ' ' . $checkMark . '</div>
@@ -66,14 +66,14 @@ $result = mysqli_query($conn, $sql);
                   </form>
                 </li>
                 ';
-							}
-							echo "
+              }
+              echo "
               </ul>
               ";
-						} else {
-							echo "You currently have no notification";
-						}
-						?>
+            } else {
+              echo "You currently have no notification";
+            }
+            ?>
           </div>
         </div>
       </div>
