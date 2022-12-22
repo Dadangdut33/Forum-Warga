@@ -14,7 +14,7 @@ $result = mysqli_query($conn, $sql);
 
 // username must be the logged in user
 if (!isset($_SESSION['username']) || $_SESSION['username'] != $username) {
-  header("Location: /");
+  header("Location: /403");
   exit();
 }
 
