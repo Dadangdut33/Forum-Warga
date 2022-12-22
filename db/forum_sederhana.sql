@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 11, 2022 at 05:29 PM
+-- Generation Time: Dec 22, 2022 at 04:38 AM
 -- Server version: 5.7.36
 -- PHP Version: 7.4.26
 
@@ -56,15 +56,7 @@ CREATE TABLE IF NOT EXISTS `notification` (
   `userID` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_UserNotif` (`userID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `notification`
---
-
-INSERT INTO `notification` (`id`, `details`, `link`, `type`, `isRead`, `time`, `userID`) VALUES
-(1, 'Jelek lu', '#', 'Comment Deleted By Admin', 1, '2022-11-30 13:47:43', 'Password123'),
-(2, 'Jelek lagi lu', '#', 'Post Deleted By Admin', 1, '2022-11-30 13:47:49', 'Password123');
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -93,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `post` (
 
 INSERT INTO `post` (`id`, `title`, `content`, `pinned`, `time`, `views`, `userID`, `topicID`) VALUES
 (2, 'test  ', 'dasd asd asd asd asdasdasdasdasdasdadasdasdasdadasdas ', 0, '2022-11-30 13:44:42', 18, 'Fauzan', 7),
-(4, '105 OR 1=1', '105 OR 1=1 dasd asd sadasdasdasdads', 1, '2022-11-30 13:56:17', 4, 'Password123', 7);
+(5, 'tasdas        ', 'd asd as dad asd asdada', 1, '2022-12-21 14:22:28', 49, 'Fauzan', 7);
 
 -- --------------------------------------------------------
 
@@ -106,19 +98,18 @@ CREATE TABLE IF NOT EXISTS `topic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(300) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `topic`
 --
 
 INSERT INTO `topic` (`id`, `name`) VALUES
-(1, 'General'),
-(2, 'Games'),
-(3, 'Movies'),
-(4, 'Music'),
-(5, 'Science'),
-(6, 'Random Discussion');
+(7, 'General'),
+(8, 'Announcement'),
+(9, 'News'),
+(10, 'Games'),
+(11, 'Technology');
 
 -- --------------------------------------------------------
 
@@ -141,7 +132,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`username`, `password`, `email`, `isAdmin`, `bio`) VALUES
-('Password123', '$2y$10$lIIvIdJa9wy60cKvH/GoBeaSVcS4iV/x1ZeVWHsDAT3UHqv21ABQ2', 'myemail@gmail.com', 1, ''),
+('Ammar', '$2y$10$8oEauy1b6IQfsbMNKEgWeuw3k6vdsmQmBEt19TaMlXBxWUcd5JPeK', 'ammar@gmail.com', 1, ''),
+('Cherrie', '$2y$10$eMHg3nKdzvsQsrfTspnMROeqiK15WHscnxeToBmvwAf7GB8gyIVzq', 'cherrie@gmail.com', 1, ''),
+('Fardal', '$2y$10$GN1maH6HoBxIkpIQPfygZuksk1fuD3GZNxJpzXj.ivpCO90/e5qNi', 'fardal@gmail.com', 1, ''),
+('Fauzan', '$2y$10$Ec1Pct9cNfV4LIDKnLkSUesxyJrcrvARsm.Fm/PHHCryghrZ8if5C', 'fauzan@gmail.com', 1, '');
 
 -- --------------------------------------------------------
 
@@ -160,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `web_config` (
 --
 
 INSERT INTO `web_config` (`id`, `forum_name`) VALUES
-(1, 'Sukaforum');
+(1, 'Ciputat');
 
 --
 -- Constraints for dumped tables
