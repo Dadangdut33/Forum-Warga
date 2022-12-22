@@ -33,7 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // get the data
   $username = $_POST['username'];
   $email = $_POST['email'];
-  $isAdmin = $_POST['isAdmin'];
+
+  // if the user itself is editing, then isAdmin is always 1
+  if ($username == $_SESSION['username']) {
+    $isAdmin = 1;
+  } else {
+    $isAdmin = $_POST['isAdmin'];
+  }
 
   // sanitize input
   $username = strip_tags($username);
